@@ -1,0 +1,63 @@
+{
+  "name": "contosouniversityangular.webui",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "echo Starting... && ng serve",
+    "build": "ng build",
+    "build:ssr": "ng run ContosoUniversityAngular.WebUI:server:dev",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "9.0.7",
+    "@angular/common": "9.0.7",
+    "@angular/compiler": "9.0.7",
+    "@angular/core": "9.0.7",
+    "@angular/forms": "9.0.7",
+    "@angular/platform-browser": "9.0.7",
+    "@angular/platform-browser-dynamic": "9.0.7",
+    "@angular/platform-server": "9.0.7",
+    "@angular/router": "9.0.7",
+    "@fortawesome/angular-fontawesome": "^0.5.0",
+    "@fortawesome/fontawesome-svg-core": "^1.2.30",
+    "@fortawesome/free-solid-svg-icons": "^5.14.0",
+    "@nguniversal/module-map-ngfactory-loader": "8.0.0-rc.1",
+    "aspnet-prerendering": "^3.0.1",
+    "bootstrap": "^4.5.2",
+    "core-js": "^2.6.11",
+    "jquery": "3.5.0",
+    "ngx-bootstrap": "^5.6.2",
+    "oidc-client": "^1.9.1",
+    "popper.js": "^1.16.1",
+    "rxjs": "^6.6.2",
+    "tslib": "^1.13.0",
+    "zone.js": "~0.10.2"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "~0.900.7",
+    "@angular/cli": "9.0.7",
+    "@angular/compiler-cli": "9.0.7",
+    "@angular/language-service": "9.0.7",
+    "@types/jasmine": "^3.3.16",
+    "@types/jasminewd2": "^2.0.8",
+    "@types/node": "^12.12.55",
+    "codelyzer": "^5.2.2",
+    "jasmine-core": "~3.3.0",
+    "jasmine-spec-reporter": "~4.2.1",
+    "karma": "^4.4.1",
+    "karma-chrome-launcher": "~2.2.0",
+    "karma-coverage-istanbul-reporter": "^2.0.6",
+    "karma-jasmine": "~2.0.1",
+    "karma-jasmine-html-reporter": "^1.5.4",
+    "typescript": "3.7.5"
+  },
+  "optionalDependencies": {
+    "node-sass": "^4.9.3",
+    "protractor": "~5.4.0",
+    "ts-node": "~5.0.1",
+    "tslint": "~5.9.1"
+  }
+}

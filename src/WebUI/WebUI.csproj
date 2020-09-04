@@ -44,9 +44,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\course\course.module.ts" />
     <None Remove="ClientApp\src\app\course\courseOverview.component.ts" />
+    <None Remove="ClientApp\src\app\department\department.module.ts" />
     <None Remove="ClientApp\src\app\department\departmentOverview.component.ts" />
+    <None Remove="ClientApp\src\app\instructor\instructor.module.ts" />
     <None Remove="ClientApp\src\app\instructor\instructorOverview.component.ts" />
+    <None Remove="ClientApp\src\app\student\student.module.ts" />
     <None Remove="ClientApp\src\app\student\studentOverview.component.ts" />
   </ItemGroup>
 
@@ -63,10 +67,19 @@
     <TypeScriptCompile Update="ClientApp\src\app\course\courseOverview.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Update="ClientApp\src\app\department\department.module.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Update="ClientApp\src\app\department\departmentOverview.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Update="ClientApp\src\app\instructor\instructor.module.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Update="ClientApp\src\app\instructor\instructorOverview.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="ClientApp\src\app\student\student.module.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>

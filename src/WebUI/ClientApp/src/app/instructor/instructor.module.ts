@@ -1,15 +1,10 @@
 import { NgModule } from '@angular/core';
+import { InstructorOverviewComponent } from "./instructorOverview.component";
 
 @NgModule({
   declarations: [
-
+    InstructorOverviewComponent
   ],
-  imports: [
-
-  ],
-  providers: [
-
-  ],
-  exports: []
+  exports: [InstructorOverviewComponent]
 })
 export class InstructorModule { }

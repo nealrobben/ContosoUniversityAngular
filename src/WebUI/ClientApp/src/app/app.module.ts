@@ -5,6 +5,11 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
+import { CourseModule } from "./course/course.module";
+import { DepartmentModule } from "./department/department.module";
+import { InstructorModule } from "./instructor/instructor.module";
+import { StudentModule } from "./student/student.module";
+
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
@@ -39,7 +44,11 @@ import { ModalModule } from 'ngx-bootstrap/modal';
       { path: 'todo', component: TodoComponent, canActivate: [AuthorizeGuard] },
     ]),
     BrowserAnimationsModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    CourseModule,
+    DepartmentModule,
+    InstructorModule,
+    StudentModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },

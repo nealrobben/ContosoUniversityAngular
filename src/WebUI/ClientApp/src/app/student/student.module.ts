@@ -1,15 +1,10 @@
 import { NgModule } from '@angular/core';
+import { StudentOverviewComponent } from "./studentOverview.component";
 
 @NgModule({
   declarations: [
-
+    StudentOverviewComponent
   ],
-  imports: [
-
-  ],
-  providers: [
-
-  ],
-  exports: []
+  exports: [StudentOverviewComponent]
 })
 export class StudentModule { }

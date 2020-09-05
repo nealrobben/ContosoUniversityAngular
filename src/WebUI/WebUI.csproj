@@ -50,6 +50,7 @@
     <None Remove="ClientApp\src\app\department\department.component.ts" />
     <None Remove="ClientApp\src\app\department\department.module.ts" />
     <None Remove="ClientApp\src\app\department\departmentOverview.component.ts" />
+    <None Remove="ClientApp\src\app\instructor\instructor.component.ts" />
     <None Remove="ClientApp\src\app\instructor\instructor.module.ts" />
     <None Remove="ClientApp\src\app\instructor\instructorOverview.component.ts" />
     <None Remove="ClientApp\src\app\student\student.component.ts" />
@@ -80,6 +81,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Update="ClientApp\src\app\department\departmentOverview.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="ClientApp\src\app\instructor\instructor.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Update="ClientApp\src\app\instructor\instructor.module.ts">

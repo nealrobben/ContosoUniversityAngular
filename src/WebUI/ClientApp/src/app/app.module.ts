@@ -22,10 +22,10 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalModule } from 'ngx-bootstrap/modal';
 
-import { InstructorOverviewComponent } from './instructor/instructorOverview.component';
 import { StudentComponent } from './student/student.component';
 import { CourseComponent } from './course/course.component';
 import { DepartmentComponent } from './department/department.component';
+import { InstructorComponent } from './instructor/instructor.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +46,7 @@ import { DepartmentComponent } from './department/department.component';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'students', component: StudentComponent },
       { path: 'courses', component: CourseComponent },
-      { path: 'instructors', component: InstructorOverviewComponent },
+      { path: 'instructors', component: InstructorComponent },
       { path: 'departments', component: DepartmentComponent }
     ]),
     BrowserAnimationsModule,

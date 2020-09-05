@@ -44,6 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\course\course.component.ts" />
     <None Remove="ClientApp\src\app\course\course.module.ts" />
     <None Remove="ClientApp\src\app\course\courseOverview.component.ts" />
     <None Remove="ClientApp\src\app\department\department.module.ts" />
@@ -65,6 +66,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Update="ClientApp\src\app\course\course.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Update="ClientApp\src\app\course\courseOverview.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

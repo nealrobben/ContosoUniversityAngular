@@ -50,6 +50,7 @@
     <None Remove="ClientApp\src\app\department\departmentOverview.component.ts" />
     <None Remove="ClientApp\src\app\instructor\instructor.module.ts" />
     <None Remove="ClientApp\src\app\instructor\instructorOverview.component.ts" />
+    <None Remove="ClientApp\src\app\student\student.component.ts" />
     <None Remove="ClientApp\src\app\student\student.module.ts" />
     <None Remove="ClientApp\src\app\student\studentOverview.component.ts" />
   </ItemGroup>

@@ -21,10 +21,11 @@ import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { StudentOverviewComponent } from './student/studentOverview.component';
+
 import { CourseOverviewComponent } from './course/courseOverview.component';
 import { InstructorOverviewComponent } from './instructor/instructorOverview.component';
 import { DepartmentOverviewComponent } from './department/departmentOverview.component';
+import { StudentComponent } from './student/student.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,7 @@ import { DepartmentOverviewComponent } from './department/departmentOverview.com
     ApiAuthorizationModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'students', component: StudentOverviewComponent },
+      { path: 'students', component: StudentComponent },
       { path: 'courses', component: CourseOverviewComponent },
       { path: 'instructors', component: InstructorOverviewComponent },
       { path: 'departments', component: DepartmentOverviewComponent }

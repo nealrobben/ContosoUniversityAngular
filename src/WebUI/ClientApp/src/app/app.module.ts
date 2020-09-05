@@ -13,6 +13,7 @@ import { StudentModule } from "./student/student.module";
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
+import { AboutComponent } from './about/about.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { TodoComponent } from './todo/todo.component';
@@ -44,6 +45,7 @@ import { InstructorComponent } from './instructor/instructor.component';
     ApiAuthorizationModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: 'about', component: AboutComponent, pathMatch: 'full' },
       { path: 'students', component: StudentComponent },
       { path: 'courses', component: CourseComponent },
       { path: 'instructors', component: InstructorComponent },

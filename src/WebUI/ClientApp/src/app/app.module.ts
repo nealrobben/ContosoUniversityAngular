@@ -23,9 +23,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalModule } from 'ngx-bootstrap/modal';
 
 import { InstructorOverviewComponent } from './instructor/instructorOverview.component';
-import { DepartmentOverviewComponent } from './department/departmentOverview.component';
 import { StudentComponent } from './student/student.component';
 import { CourseComponent } from './course/course.component';
+import { DepartmentComponent } from './department/department.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +47,7 @@ import { CourseComponent } from './course/course.component';
       { path: 'students', component: StudentComponent },
       { path: 'courses', component: CourseComponent },
       { path: 'instructors', component: InstructorOverviewComponent },
-      { path: 'departments', component: DepartmentOverviewComponent }
+      { path: 'departments', component: DepartmentComponent }
     ]),
     BrowserAnimationsModule,
     ModalModule.forRoot(),

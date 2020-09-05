@@ -1,5 +1,6 @@
 using ContosoUniversityAngular.Infrastructure.Identity;
 using ContosoUniversityAngular.Infrastructure.Persistence;
+using ContosoUniversityAngular.Persistence;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,7 @@ namespace ContosoUniversityAngular.WebUI
 
                 try
                 {
+                    //Old code, remove later
                     var context = services.GetRequiredService<ApplicationDbContext>();
 
                     if (context.Database.IsSqlServer())
@@ -34,6 +36,16 @@ namespace ContosoUniversityAngular.WebUI
 
                     await ApplicationDbContextSeed.SeedDefaultUserAsync(userManager);
                     await ApplicationDbContextSeed.SeedSampleDataAsync(context);
+
+                    //Schoolcontext
+                    var schoolContext = services.GetRequiredService<SchoolContext>();
+
+                    if (schoolContext.Database.IsSqlServer())
+                    {
+                        schoolContext.Database.Migrate();
+                    }
+
+                    await SchoolContextSeed.SeedSampleDataAsync(schoolContext);
                 }
                 catch (Exception ex)
                 {

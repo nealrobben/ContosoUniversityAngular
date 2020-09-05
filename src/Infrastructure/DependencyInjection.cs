@@ -3,6 +3,7 @@ using ContosoUniversityAngular.Infrastructure.Files;
 using ContosoUniversityAngular.Infrastructure.Identity;
 using ContosoUniversityAngular.Infrastructure.Persistence;
 using ContosoUniversityAngular.Infrastructure.Services;
+using ContosoUniversityAngular.Persistence;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -38,6 +39,11 @@ namespace ContosoUniversityAngular.Infrastructure
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddTransient<ICsvFileBuilder, CsvFileBuilder>();
+
+            services.AddDbContext<SchoolContext>(options => 
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddScoped<ISchoolContext>(provider => provider.GetService<SchoolContext>());
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();

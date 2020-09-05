@@ -21,7 +21,7 @@ namespace ContosoUniversityAngular.Infrastructure.Persistence
         private IDbContextTransaction _currentTransaction;
 
         public ApplicationDbContext(
-            DbContextOptions options,
+            DbContextOptions<ApplicationDbContext> options,
             IOptions<OperationalStoreOptions> operationalStoreOptions,
             ICurrentUserService currentUserService,
             IDateTime dateTime) : base(options, operationalStoreOptions)

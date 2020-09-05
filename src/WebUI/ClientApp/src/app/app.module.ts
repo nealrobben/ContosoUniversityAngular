@@ -45,8 +45,8 @@ import { DepartmentOverviewComponent } from './department/departmentOverview.com
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'students', component: StudentOverviewComponent },
       { path: 'courses', component: CourseOverviewComponent },
-      { path: 'Instructors', component: InstructorOverviewComponent },
-      { path: 'Departments', component: DepartmentOverviewComponent }
+      { path: 'instructors', component: InstructorOverviewComponent },
+      { path: 'departments', component: DepartmentOverviewComponent }
     ]),
     BrowserAnimationsModule,
     ModalModule.forRoot(),

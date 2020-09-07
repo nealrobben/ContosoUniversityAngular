@@ -14,6 +14,72 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
+export interface IDepartmentsApiClient {
+    getAll(): Observable<DepartmentsOverviewVM>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class DepartmentsApiClient implements IDepartmentsApiClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    getAll(): Observable<DepartmentsOverviewVM> {
+        let url_ = this.baseUrl + "/api/DepartmentsApi";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(<any>response_);
+                } catch (e) {
+                    return <Observable<DepartmentsOverviewVM>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<DepartmentsOverviewVM>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<DepartmentsOverviewVM> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = DepartmentsOverviewVM.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<DepartmentsOverviewVM>(<any>null);
+    }
+}
+
 export interface ITodoItemsClient {
     create(command: CreateTodoItemCommand): Observable<number>;
     update(id: number, command: UpdateTodoItemCommand): Observable<FileResponse>;
@@ -584,6 +650,102 @@ export class WeatherForecastClient implements IWeatherForecastClient {
         }
         return _observableOf<WeatherForecast[]>(<any>null);
     }
+}
+
+export class DepartmentsOverviewVM implements IDepartmentsOverviewVM {
+    departments?: DepartmentVM[] | undefined;
+
+    constructor(data?: IDepartmentsOverviewVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["departments"])) {
+                this.departments = [] as any;
+                for (let item of _data["departments"])
+                    this.departments!.push(DepartmentVM.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): DepartmentsOverviewVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new DepartmentsOverviewVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.departments)) {
+            data["departments"] = [];
+            for (let item of this.departments)
+                data["departments"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IDepartmentsOverviewVM {
+    departments?: DepartmentVM[] | undefined;
+}
+
+export class DepartmentVM implements IDepartmentVM {
+    departmentID?: number;
+    name?: string | undefined;
+    budget?: number;
+    startDate?: Date;
+    administratorName?: string | undefined;
+
+    constructor(data?: IDepartmentVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.departmentID = _data["departmentID"];
+            this.name = _data["name"];
+            this.budget = _data["budget"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.administratorName = _data["administratorName"];
+        }
+    }
+
+    static fromJS(data: any): DepartmentVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new DepartmentVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["departmentID"] = this.departmentID;
+        data["name"] = this.name;
+        data["budget"] = this.budget;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["administratorName"] = this.administratorName;
+        return data; 
+    }
+}
+
+export interface IDepartmentVM {
+    departmentID?: number;
+    name?: string | undefined;
+    budget?: number;
+    startDate?: Date;
+    administratorName?: string | undefined;
 }
 
 export class CreateTodoItemCommand implements ICreateTodoItemCommand {

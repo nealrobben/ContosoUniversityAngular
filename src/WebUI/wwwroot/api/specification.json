@@ -6,6 +6,26 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/DepartmentsApi": {
+      "get": {
+        "tags": [
+          "DepartmentsApi"
+        ],
+        "operationId": "DepartmentsApi_GetAll",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DepartmentsOverviewVM"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/TodoItems": {
       "post": {
         "tags": [
@@ -388,6 +408,45 @@
   },
   "components": {
     "schemas": {
+      "DepartmentsOverviewVM": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "departments": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/DepartmentVM"
+            }
+          }
+        }
+      },
+      "DepartmentVM": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "departmentID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "budget": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "administratorName": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "CreateTodoItemCommand": {
         "type": "object",
         "additionalProperties": false,

@@ -6,12 +6,12 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/api/DepartmentsApi": {
+    "/api/Departments": {
       "get": {
         "tags": [
-          "DepartmentsApi"
+          "Departments"
         ],
-        "operationId": "DepartmentsApi_GetAll",
+        "operationId": "Departments_GetAll",
         "responses": {
           "200": {
             "description": "",

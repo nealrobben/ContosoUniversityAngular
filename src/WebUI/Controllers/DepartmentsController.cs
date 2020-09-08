@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace ContosoUniversityAngular.WebUI.Controllers
 {
-    public class DepartmentsApiController : ApiController
+    public class DepartmentsController : ApiController
     {
         [HttpGet]
         public async Task<ActionResult<DepartmentsOverviewVM>> GetAll()

@@ -22,18 +22,18 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
+    <tr *ngFor="let department of vm.departments">
       <td>
-        Name
+        {{department.name}}
       </td>
       <td>
-        Budget
+        {{department.budget}}
       </td>
       <td>
-        StartDate
+        {{department.startDate}}
       </td>
       <td>
-        AdministratorName
+        {{department.administratorName}}
       </td>
       <td>
         <a>Edit</a> |

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { CommonModule } from "@angular/common";
 
 import { CourseModule } from "./course/course.module";
 import { DepartmentModule } from "./department/department.module";
@@ -36,6 +37,7 @@ import { InstructorComponent } from './instructor/instructor.component';
     TodoComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     FontAwesomeModule,
     HttpClientModule,

@@ -14,14 +14,14 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
-export interface IDepartmentsApiClient {
+export interface IDepartmentsClient {
     getAll(): Observable<DepartmentsOverviewVM>;
 }
 
 @Injectable({
     providedIn: 'root'
 })
-export class DepartmentsApiClient implements IDepartmentsApiClient {
+export class DepartmentsClient implements IDepartmentsClient {
     private http: HttpClient;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -32,7 +32,7 @@ export class DepartmentsApiClient implements IDepartmentsApiClient {
     }
 
     getAll(): Observable<DepartmentsOverviewVM> {
-        let url_ = this.baseUrl + "/api/DepartmentsApi";
+        let url_ = this.baseUrl + "/api/Departments";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {

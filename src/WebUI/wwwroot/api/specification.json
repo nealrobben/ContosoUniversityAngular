@@ -6,6 +6,26 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/Courses": {
+      "get": {
+        "tags": [
+          "Courses"
+        ],
+        "operationId": "Courses_GetAll",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoursesOverviewVM"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Departments": {
       "get": {
         "tags": [
@@ -408,6 +428,46 @@
   },
   "components": {
     "schemas": {
+      "CoursesOverviewVM": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "courses": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/CourseVM"
+            }
+          }
+        }
+      },
+      "CourseVM": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "courseID": {
+            "title": "Number",
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 3,
+            "nullable": true
+          },
+          "credits": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 5.0,
+            "minimum": 0.0
+          },
+          "departmentName": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "DepartmentsOverviewVM": {
         "type": "object",
         "additionalProperties": false,

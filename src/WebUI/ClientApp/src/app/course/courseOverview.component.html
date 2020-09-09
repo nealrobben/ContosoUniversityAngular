@@ -22,18 +22,18 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
+    <tr *ngFor="let course of vm.courses">
       <td>
-        CourseID
+        {{course.courseID}}
       </td>
       <td>
-        Title
+        {{course.title}}
       </td>
       <td>
-        Credits
+        {{course.credits}}
       </td>
       <td>
-        DepartmentName
+        {{course.departmentName}}
       </td>
       <td>
         <a>Edit</a> |

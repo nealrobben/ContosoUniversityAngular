@@ -27,10 +27,10 @@
         {{department.name}}
       </td>
       <td>
-        {{department.budget}}
+        {{department.budget | currency:'USD'}}
       </td>
       <td>
-        {{department.startDate}}
+        {{department.startDate | date:'yyyy-MM-dd'}}
       </td>
       <td>
         {{department.administratorName}}

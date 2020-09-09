@@ -10,12 +10,12 @@
     </th>
   </tr>
 
-  <tr>
+  <tr *ngFor="let item of vm.items">
     <td>
-      EnrollmentDate
+      {{item.enrollmentDate | date:'yyyy-MM-dd'}}
     </td>
     <td>
-      StudentCount
+      {{item.studentCount}}
     </td>
   </tr>
 </table>

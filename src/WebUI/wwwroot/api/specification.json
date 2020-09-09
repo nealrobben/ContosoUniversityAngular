@@ -6,6 +6,26 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/About": {
+      "get": {
+        "tags": [
+          "About"
+        ],
+        "operationId": "About_GetAboutInfo",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AboutInfoVM"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Courses": {
       "get": {
         "tags": [
@@ -428,6 +448,34 @@
   },
   "components": {
     "schemas": {
+      "AboutInfoVM": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/EnrollmentDateGroup"
+            }
+          }
+        }
+      },
+      "EnrollmentDateGroup": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "enrollmentDate": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "studentCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "CoursesOverviewVM": {
         "type": "object",
         "additionalProperties": false,

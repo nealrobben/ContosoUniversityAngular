@@ -10,6 +10,7 @@ import { CourseModule } from "./course/course.module";
 import { DepartmentModule } from "./department/department.module";
 import { InstructorModule } from "./instructor/instructor.module";
 import { StudentModule } from "./student/student.module";
+import { AboutModule } from "./about/about.module";
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -56,7 +57,8 @@ import { InstructorComponent } from './instructor/instructor.component';
     CourseModule,
     DepartmentModule,
     InstructorModule,
-    StudentModule
+    StudentModule,
+    AboutModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },

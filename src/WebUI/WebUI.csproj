@@ -44,6 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\about\about.module.ts" />
     <None Remove="ClientApp\src\app\course\course.component.ts" />
     <None Remove="ClientApp\src\app\course\course.module.ts" />
     <None Remove="ClientApp\src\app\course\courseOverview.component.ts" />

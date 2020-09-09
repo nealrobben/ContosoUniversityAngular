@@ -14,6 +14,72 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
+export interface IAboutClient {
+    getAboutInfo(): Observable<AboutInfoVM>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class AboutClient implements IAboutClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    getAboutInfo(): Observable<AboutInfoVM> {
+        let url_ = this.baseUrl + "/api/About";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAboutInfo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAboutInfo(<any>response_);
+                } catch (e) {
+                    return <Observable<AboutInfoVM>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<AboutInfoVM>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAboutInfo(response: HttpResponseBase): Observable<AboutInfoVM> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = AboutInfoVM.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<AboutInfoVM>(<any>null);
+    }
+}
+
 export interface ICoursesClient {
     getAll(): Observable<CoursesOverviewVM>;
 }
@@ -718,6 +784,90 @@ export class WeatherForecastClient implements IWeatherForecastClient {
     }
 }
 
+export class AboutInfoVM implements IAboutInfoVM {
+    items?: EnrollmentDateGroup[] | undefined;
+
+    constructor(data?: IAboutInfoVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(EnrollmentDateGroup.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): AboutInfoVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new AboutInfoVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IAboutInfoVM {
+    items?: EnrollmentDateGroup[] | undefined;
+}
+
+export class EnrollmentDateGroup implements IEnrollmentDateGroup {
+    enrollmentDate?: Date | undefined;
+    studentCount?: number;
+
+    constructor(data?: IEnrollmentDateGroup) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.enrollmentDate = _data["enrollmentDate"] ? new Date(_data["enrollmentDate"].toString()) : <any>undefined;
+            this.studentCount = _data["studentCount"];
+        }
+    }
+
+    static fromJS(data: any): EnrollmentDateGroup {
+        data = typeof data === 'object' ? data : {};
+        let result = new EnrollmentDateGroup();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["enrollmentDate"] = this.enrollmentDate ? formatDate(this.enrollmentDate) : <any>undefined;
+        data["studentCount"] = this.studentCount;
+        return data; 
+    }
+}
+
+export interface IEnrollmentDateGroup {
+    enrollmentDate?: Date | undefined;
+    studentCount?: number;
+}
+
 export class CoursesOverviewVM implements ICoursesOverviewVM {
     courses?: CourseVM[] | undefined;
 
@@ -1371,6 +1521,12 @@ export interface IWeatherForecast {
     temperatureC?: number;
     temperatureF?: number;
     summary?: string | undefined;
+}
+
+function formatDate(d: Date) {
+    return d.getFullYear() + '-' + 
+        (d.getMonth() < 9 ? ('0' + (d.getMonth()+1)) : (d.getMonth()+1)) + '-' +
+        (d.getDate() < 10 ? ('0' + d.getDate()) : d.getDate());
 }
 
 export interface FileResponse {

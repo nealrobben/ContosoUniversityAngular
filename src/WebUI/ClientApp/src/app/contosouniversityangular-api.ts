@@ -82,6 +82,7 @@ export class AboutClient implements IAboutClient {
 
 export interface ICoursesClient {
     getAll(): Observable<CoursesOverviewVM>;
+    get(id: string | null): Observable<CourseDetailVM>;
 }
 
 @Injectable({
@@ -144,10 +145,69 @@ export class CoursesClient implements ICoursesClient {
         }
         return _observableOf<CoursesOverviewVM>(<any>null);
     }
+
+    get(id: string | null): Observable<CourseDetailVM> {
+        let url_ = this.baseUrl + "/api/Courses/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet(<any>response_);
+                } catch (e) {
+                    return <Observable<CourseDetailVM>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CourseDetailVM>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGet(response: HttpResponseBase): Observable<CourseDetailVM> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CourseDetailVM.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CourseDetailVM>(<any>null);
+    }
 }
 
 export interface IDepartmentsClient {
     getAll(): Observable<DepartmentsOverviewVM>;
+    get(id: string | null): Observable<DepartmentDetailVM>;
 }
 
 @Injectable({
@@ -209,6 +269,64 @@ export class DepartmentsClient implements IDepartmentsClient {
             }));
         }
         return _observableOf<DepartmentsOverviewVM>(<any>null);
+    }
+
+    get(id: string | null): Observable<DepartmentDetailVM> {
+        let url_ = this.baseUrl + "/api/Departments/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet(<any>response_);
+                } catch (e) {
+                    return <Observable<DepartmentDetailVM>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<DepartmentDetailVM>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGet(response: HttpResponseBase): Observable<DepartmentDetailVM> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = DepartmentDetailVM.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<DepartmentDetailVM>(<any>null);
     }
 }
 
@@ -960,6 +1078,122 @@ export interface ICourseVM {
     departmentName?: string | undefined;
 }
 
+export class CourseDetailVM implements ICourseDetailVM {
+    courseID?: number;
+    title?: string | undefined;
+    credits?: number;
+    departmentID?: number;
+
+    constructor(data?: ICourseDetailVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.courseID = _data["courseID"];
+            this.title = _data["title"];
+            this.credits = _data["credits"];
+            this.departmentID = _data["departmentID"];
+        }
+    }
+
+    static fromJS(data: any): CourseDetailVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new CourseDetailVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["courseID"] = this.courseID;
+        data["title"] = this.title;
+        data["credits"] = this.credits;
+        data["departmentID"] = this.departmentID;
+        return data; 
+    }
+}
+
+export interface ICourseDetailVM {
+    courseID?: number;
+    title?: string | undefined;
+    credits?: number;
+    departmentID?: number;
+}
+
+export class ProblemDetails implements IProblemDetails {
+    type?: string | undefined;
+    title?: string | undefined;
+    status?: number | undefined;
+    detail?: string | undefined;
+    instance?: string | undefined;
+    extensions?: { [key: string]: any; } | undefined;
+
+    constructor(data?: IProblemDetails) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.type = _data["type"];
+            this.title = _data["title"];
+            this.status = _data["status"];
+            this.detail = _data["detail"];
+            this.instance = _data["instance"];
+            if (_data["extensions"]) {
+                this.extensions = {} as any;
+                for (let key in _data["extensions"]) {
+                    if (_data["extensions"].hasOwnProperty(key))
+                        this.extensions![key] = _data["extensions"][key];
+                }
+            }
+        }
+    }
+
+    static fromJS(data: any): ProblemDetails {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProblemDetails();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["type"] = this.type;
+        data["title"] = this.title;
+        data["status"] = this.status;
+        data["detail"] = this.detail;
+        data["instance"] = this.instance;
+        if (this.extensions) {
+            data["extensions"] = {};
+            for (let key in this.extensions) {
+                if (this.extensions.hasOwnProperty(key))
+                    data["extensions"][key] = this.extensions[key];
+            }
+        }
+        return data; 
+    }
+}
+
+export interface IProblemDetails {
+    type?: string | undefined;
+    title?: string | undefined;
+    status?: number | undefined;
+    detail?: string | undefined;
+    instance?: string | undefined;
+    extensions?: { [key: string]: any; } | undefined;
+}
+
 export class DepartmentsOverviewVM implements IDepartmentsOverviewVM {
     departments?: DepartmentVM[] | undefined;
 
@@ -1049,6 +1283,58 @@ export class DepartmentVM implements IDepartmentVM {
 }
 
 export interface IDepartmentVM {
+    departmentID?: number;
+    name?: string | undefined;
+    budget?: number;
+    startDate?: Date;
+    administratorName?: string | undefined;
+}
+
+export class DepartmentDetailVM implements IDepartmentDetailVM {
+    departmentID?: number;
+    name?: string | undefined;
+    budget?: number;
+    startDate?: Date;
+    administratorName?: string | undefined;
+
+    constructor(data?: IDepartmentDetailVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.departmentID = _data["departmentID"];
+            this.name = _data["name"];
+            this.budget = _data["budget"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.administratorName = _data["administratorName"];
+        }
+    }
+
+    static fromJS(data: any): DepartmentDetailVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new DepartmentDetailVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["departmentID"] = this.departmentID;
+        data["name"] = this.name;
+        data["budget"] = this.budget;
+        data["startDate"] = this.startDate ? formatDate(this.startDate) : <any>undefined;
+        data["administratorName"] = this.administratorName;
+        return data; 
+    }
+}
+
+export interface IDepartmentDetailVM {
     departmentID?: number;
     name?: string | undefined;
     budget?: number;

@@ -46,6 +46,48 @@
         }
       }
     },
+    "/api/Courses/{id}": {
+      "get": {
+        "tags": [
+          "Courses"
+        ],
+        "operationId": "Courses_Get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseDetailVM"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Departments": {
       "get": {
         "tags": [
@@ -59,6 +101,48 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DepartmentsOverviewVM"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Departments/{id}": {
+      "get": {
+        "tags": [
+          "Departments"
+        ],
+        "operationId": "Departments_Get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DepartmentDetailVM"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -516,6 +600,60 @@
           }
         }
       },
+      "CourseDetailVM": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "courseID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "credits": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "departmentID": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          },
+          "extensions": {
+            "type": "object",
+            "nullable": true,
+            "additionalProperties": {}
+          }
+        }
+      },
       "DepartmentsOverviewVM": {
         "type": "object",
         "additionalProperties": false,
@@ -548,6 +686,32 @@
           "startDate": {
             "type": "string",
             "format": "date-time"
+          },
+          "administratorName": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "DepartmentDetailVM": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "departmentID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "budget": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
           },
           "administratorName": {
             "type": "string",

@@ -27,6 +27,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { StudentComponent } from './student/student.component';
 import { CourseComponent } from './course/course.component';
 import { DepartmentComponent } from './department/department.component';
+import { DepartmentOverviewComponent } from './department/departmentOverview.component';
+import { DepartmentDetailsComponent } from './department/departmentDetails.component';
 import { InstructorComponent } from './instructor/instructor.component';
 
 @NgModule({
@@ -50,7 +52,12 @@ import { InstructorComponent } from './instructor/instructor.component';
       { path: 'students', component: StudentComponent },
       { path: 'courses', component: CourseComponent },
       { path: 'instructors', component: InstructorComponent },
-      { path: 'departments', component: DepartmentComponent }
+      {
+        path: 'departments', component: DepartmentComponent,
+        children: [
+          { path: "details", component: DepartmentDetailsComponent },
+          { path: "**", component: DepartmentOverviewComponent }
+        ]}
     ]),
     BrowserAnimationsModule,
     ModalModule.forRoot(),

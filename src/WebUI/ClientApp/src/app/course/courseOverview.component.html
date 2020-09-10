@@ -36,7 +36,7 @@
         {{course.departmentName}}
       </td>
       <td>
-        <a>Edit</a> |
+        <a [routerLink]="['/courses/edit', course.courseID]" routerLinkActive="active">Edit</a> |
         <a [routerLink]="['/courses/details', course.courseID]" routerLinkActive="active">Details</a> |
         <a>Delete</a>
       </td>

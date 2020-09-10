@@ -26,6 +26,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 
 import { StudentComponent } from './student/student.component';
 import { CourseComponent } from './course/course.component';
+import { CourseOverviewComponent } from './course/courseOverview.component';
+import { CourseDetailsComponent } from './course/courseDetails.component';
 import { DepartmentComponent } from './department/department.component';
 import { DepartmentOverviewComponent } from './department/departmentOverview.component';
 import { DepartmentDetailsComponent } from './department/departmentDetails.component';
@@ -50,7 +52,13 @@ import { InstructorComponent } from './instructor/instructor.component';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'about', component: AboutComponent, pathMatch: 'full' },
       { path: 'students', component: StudentComponent },
-      { path: 'courses', component: CourseComponent },
+      {
+        path: 'courses', component: CourseComponent,
+        children: [
+          { path: "details", component: CourseDetailsComponent },
+          { path: "**", component: CourseOverviewComponent }
+        ]
+      },
       { path: 'instructors', component: InstructorComponent },
       {
         path: 'departments', component: DepartmentComponent,

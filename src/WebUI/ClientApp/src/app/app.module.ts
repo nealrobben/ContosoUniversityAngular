@@ -68,7 +68,7 @@ import { InstructorDetailsComponent } from './instructor/instructorDetails.compo
       {
         path: 'courses', component: CourseComponent,
         children: [
-          { path: "details", component: CourseDetailsComponent },
+          { path: "details/:id", component: CourseDetailsComponent },
           { path: "**", component: CourseOverviewComponent }
         ]
       },

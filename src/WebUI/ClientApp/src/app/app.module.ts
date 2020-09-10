@@ -82,7 +82,7 @@ import { InstructorDetailsComponent } from './instructor/instructorDetails.compo
       {
         path: 'departments', component: DepartmentComponent,
         children: [
-          { path: "details", component: DepartmentDetailsComponent },
+          { path: "details/:id", component: DepartmentDetailsComponent },
           { path: "**", component: DepartmentOverviewComponent }
         ]}
     ]),

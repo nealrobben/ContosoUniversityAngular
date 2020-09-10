@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { DepartmentsClient, DepartmentsOverviewVM } from '../contosouniversityangular-api';
+import { ActivatedRoute } from "@angular/router";
+
+import { DepartmentsClient, DepartmentsOverviewVM, DepartmentDetailVM } from '../contosouniversityangular-api';
 
 @Component({
   selector: 'department-details',
@@ -7,13 +9,15 @@ import { DepartmentsClient, DepartmentsOverviewVM } from '../contosouniversityan
 })
 export class DepartmentDetailsComponent {
 
-  //public vm: DepartmentsOverviewVM = new DepartmentsOverviewVM();
-  //title = 'Department details';
+  public vm: DepartmentDetailVM = new DepartmentDetailVM();
 
-  //constructor(private client: DepartmentsClient) {
-  //  client.getAll().subscribe(result => {
-  //    this.vm = result;
-  //  }, error => console.error(error));
-  //}
+  constructor(private client: DepartmentsClient, activeRoute: ActivatedRoute) {
+
+    var departmentId = activeRoute.snapshot.params["id"];
+
+    client.get(departmentId).subscribe(result => {
+      this.vm = result;
+    }, error => console.error(error));
+  }
 
 }

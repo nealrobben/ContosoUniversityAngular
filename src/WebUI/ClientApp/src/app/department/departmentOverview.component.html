@@ -37,7 +37,7 @@
       </td>
       <td>
         <a>Edit</a> |
-        <a routerLink="/departments/details" routerLinkActive="active">Details</a> |
+        <a [routerLink]="['/departments/details', department.departmentID]" routerLinkActive="active">Details</a> |
         <a>Delete</a>
       </td>
     </tr>

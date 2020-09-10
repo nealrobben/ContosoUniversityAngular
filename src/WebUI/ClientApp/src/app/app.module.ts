@@ -25,6 +25,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalModule } from 'ngx-bootstrap/modal';
 
 import { StudentComponent } from './student/student.component';
+import { StudentOverviewComponent } from './student/studentOverview.component';
+import { StudentDetailsComponent } from './student/studentDetails.component';
 
 import { CourseComponent } from './course/course.component';
 import { CourseOverviewComponent } from './course/courseOverview.component';
@@ -56,7 +58,13 @@ import { InstructorDetailsComponent } from './instructor/instructorDetails.compo
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'about', component: AboutComponent, pathMatch: 'full' },
-      { path: 'students', component: StudentComponent },
+      {
+        path: 'students', component: StudentComponent,
+        children: [
+          { path: "details", component: StudentDetailsComponent },
+          { path: "**", component: StudentOverviewComponent }
+        ]
+      },
       {
         path: 'courses', component: CourseComponent,
         children: [

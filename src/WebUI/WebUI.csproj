@@ -58,6 +58,7 @@
     <None Remove="ClientApp\src\app\instructor\instructor.component.ts" />
     <None Remove="ClientApp\src\app\instructor\instructor.module.ts" />
     <None Remove="ClientApp\src\app\instructor\instructorDetails.component.ts" />
+    <None Remove="ClientApp\src\app\instructor\instructorEdit.component.ts" />
     <None Remove="ClientApp\src\app\instructor\instructorOverview.component.ts" />
     <None Remove="ClientApp\src\app\student\student.component.ts" />
     <None Remove="ClientApp\src\app\student\student.module.ts" />
@@ -113,6 +114,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Update="ClientApp\src\app\instructor\instructorDetails.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="ClientApp\src\app\instructor\instructorEdit.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Update="ClientApp\src\app\instructor\instructorOverview.component.ts">

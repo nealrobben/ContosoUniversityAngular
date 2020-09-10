@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 
 import { InstructorOverviewComponent } from "./instructorOverview.component";
 import { InstructorDetailsComponent } from "./instructorDetails.component";
+import { InstructorEditComponent } from "./instructorEdit.component";
 import { InstructorComponent } from "./instructor.component";
 
 @NgModule({
@@ -11,8 +12,8 @@ import { InstructorComponent } from "./instructor.component";
     CommonModule, RouterModule
   ],
   declarations: [
-    InstructorOverviewComponent, InstructorComponent, InstructorDetailsComponent
+    InstructorOverviewComponent, InstructorComponent, InstructorDetailsComponent, InstructorEditComponent
   ],
-  exports: [InstructorOverviewComponent, InstructorComponent, InstructorDetailsComponent]
+  exports: [InstructorOverviewComponent, InstructorComponent, InstructorDetailsComponent, InstructorEditComponent]
 })
 export class InstructorModule { }

@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 
 import { StudentOverviewComponent } from "./studentOverview.component";
 import { StudentDetailsComponent } from "./studentDetails.component";
+import { StudentEditComponent } from "./studentEdit.component";
 import { StudentComponent } from "./student.component";
 
 //let routing = RouterModule.forChild([
@@ -23,8 +24,8 @@ import { StudentComponent } from "./student.component";
     //routing
   ],
   declarations: [
-    StudentOverviewComponent, StudentComponent, StudentDetailsComponent
+    StudentOverviewComponent, StudentComponent, StudentDetailsComponent, StudentEditComponent
   ],
-  exports: [StudentOverviewComponent, StudentComponent, StudentDetailsComponent]
+  exports: [StudentOverviewComponent, StudentComponent, StudentDetailsComponent, StudentEditComponent]
 })
 export class StudentModule { }

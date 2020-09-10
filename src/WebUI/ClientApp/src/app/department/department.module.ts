@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 
 import { DepartmentOverviewComponent } from "./departmentOverview.component";
 import { DepartmentDetailsComponent } from "./departmentDetails.component";
+import { DepartmentEditComponent } from "./departmentEdit.component";
 import { DepartmentComponent } from "./department.component";
 
 @NgModule({
@@ -11,9 +12,9 @@ import { DepartmentComponent } from "./department.component";
     CommonModule, RouterModule
   ],
   declarations: [
-    DepartmentOverviewComponent, DepartmentComponent, DepartmentDetailsComponent
+    DepartmentOverviewComponent, DepartmentComponent, DepartmentDetailsComponent, DepartmentEditComponent
   ],
   providers: [],
-  exports: [DepartmentOverviewComponent, DepartmentComponent, DepartmentDetailsComponent]
+  exports: [DepartmentOverviewComponent, DepartmentComponent, DepartmentDetailsComponent, DepartmentEditComponent]
 })
 export class DepartmentModule { }

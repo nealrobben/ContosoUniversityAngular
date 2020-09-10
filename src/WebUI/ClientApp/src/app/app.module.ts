@@ -35,6 +35,7 @@ import { CourseDetailsComponent } from './course/courseDetails.component';
 import { DepartmentComponent } from './department/department.component';
 import { DepartmentOverviewComponent } from './department/departmentOverview.component';
 import { DepartmentDetailsComponent } from './department/departmentDetails.component';
+import { DepartmentEditComponent } from './department/departmentEdit.component';
 
 import { InstructorComponent } from './instructor/instructor.component';
 import { InstructorOverviewComponent } from './instructor/instructorOverview.component';
@@ -83,6 +84,7 @@ import { InstructorDetailsComponent } from './instructor/instructorDetails.compo
         path: 'departments', component: DepartmentComponent,
         children: [
           { path: "details/:id", component: DepartmentDetailsComponent },
+          { path: "edit/:id", component: DepartmentEditComponent },
           { path: "**", component: DepartmentOverviewComponent }
         ]}
     ]),

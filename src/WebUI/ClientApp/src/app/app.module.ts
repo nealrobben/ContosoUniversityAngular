@@ -33,6 +33,7 @@ import { CourseComponent } from './course/course.component';
 import { CourseOverviewComponent } from './course/courseOverview.component';
 import { CourseDetailsComponent } from './course/courseDetails.component';
 import { CourseEditComponent } from './course/courseEdit.component';
+import { CourseCreateComponent } from './course/courseCreate.component';
 
 import { DepartmentComponent } from './department/department.component';
 import { DepartmentOverviewComponent } from './department/departmentOverview.component';
@@ -75,6 +76,7 @@ import { InstructorEditComponent } from './instructor/instructorEdit.component';
         path: 'courses', component: CourseComponent,
         children: [
           { path: "details/:id", component: CourseDetailsComponent },
+          { path: "create", component: CourseCreateComponent },
           { path: "edit/:id", component: CourseEditComponent },
           { path: "**", component: CourseOverviewComponent }
         ]

@@ -47,6 +47,7 @@
     <None Remove="ClientApp\src\app\about\about.module.ts" />
     <None Remove="ClientApp\src\app\course\course.component.ts" />
     <None Remove="ClientApp\src\app\course\course.module.ts" />
+    <None Remove="ClientApp\src\app\course\courseCreate.component.ts" />
     <None Remove="ClientApp\src\app\course\courseDetails.component.ts" />
     <None Remove="ClientApp\src\app\course\courseEdit.component.ts" />
     <None Remove="ClientApp\src\app\course\courseOverview.component.ts" />
@@ -83,6 +84,9 @@
 
   <ItemGroup>
     <TypeScriptCompile Update="ClientApp\src\app\course\course.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="ClientApp\src\app\course\courseCreate.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Update="ClientApp\src\app\course\courseDetails.component.ts">

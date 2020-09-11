@@ -11,15 +11,22 @@ export class DepartmentOverviewComponent {
   title = 'Departments';
 
   constructor(private client: DepartmentsClient) {
-    client.getAll().subscribe(result => {
-      this.vm = result;
-    }, error => console.error(error));
+    this.getDepartments();
   }
 
   public deleteDepartment(id: string, name: string) {
     if (confirm("Delete department: " + name + "?")) {
-      console.log("Implement delete functionality here");
+      this.client.delete(id).subscribe(result => {
+        this.getDepartments();
+      }, error => console.error(error));
     }
+  }
+
+  private getDepartments() {
+    console.log("getDepartments");
+    this.client.getAll().subscribe(result => {
+      this.vm = result;
+    }, error => console.error(error));
   }
 
 }

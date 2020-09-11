@@ -11,15 +11,22 @@ export class CourseOverviewComponent {
   title = 'Courses';
 
   constructor(private client: CoursesClient) {
-    client.getAll().subscribe(result => {
-      this.vm = result;
-    }, error => console.error(error));
+    this.getCourses();
   }
 
   public deleteCourse(id: string, name: string) {
     if (confirm("Delete course: " + name + "?")) {
-      console.log("Implement delete functionality here");
+      this.client.delete(id).subscribe(result => {
+        this.getCourses();
+      }, error => console.error(error));
     }
+  }
+
+  private getCourses() {
+    console.log("getCourses");
+    this.client.getAll().subscribe(result => {
+      this.vm = result;
+    }, error => console.error(error));
   }
 
 }

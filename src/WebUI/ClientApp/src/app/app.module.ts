@@ -44,6 +44,7 @@ import { DepartmentCreateComponent } from './department/departmentCreate.compone
 import { InstructorComponent } from './instructor/instructor.component';
 import { InstructorOverviewComponent } from './instructor/instructorOverview.component';
 import { InstructorDetailsComponent } from './instructor/instructorDetails.component';
+import { InstructorCreateComponent } from './instructor/instructorCreate.component';
 import { InstructorEditComponent } from './instructor/instructorEdit.component';
 
 @NgModule({
@@ -85,6 +86,7 @@ import { InstructorEditComponent } from './instructor/instructorEdit.component';
         path: 'instructors', component: InstructorComponent,
         children: [
           { path: "details", component: InstructorDetailsComponent },
+          { path: "create", component: InstructorCreateComponent },
           { path: "edit", component: InstructorEditComponent },
           { path: "**", component: InstructorOverviewComponent }
         ]

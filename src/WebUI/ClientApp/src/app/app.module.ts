@@ -27,6 +27,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { StudentComponent } from './student/student.component';
 import { StudentOverviewComponent } from './student/studentOverview.component';
 import { StudentDetailsComponent } from './student/studentDetails.component';
+import { StudentCreateComponent } from './student/studentCreate.component';
 import { StudentEditComponent } from './student/studentEdit.component';
 
 import { CourseComponent } from './course/course.component';
@@ -69,6 +70,7 @@ import { InstructorEditComponent } from './instructor/instructorEdit.component';
         path: 'students', component: StudentComponent,
         children: [
           { path: "details", component: StudentDetailsComponent },
+          { path: "create", component: StudentCreateComponent },
           { path: "edit", component: StudentEditComponent },
           { path: "**", component: StudentOverviewComponent }
         ]

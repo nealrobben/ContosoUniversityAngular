@@ -16,4 +16,10 @@ export class DepartmentOverviewComponent {
     }, error => console.error(error));
   }
 
+  public deleteDepartment(id: string, name: string) {
+    if (confirm("Delete department: " + name + "?")) {
+      console.log("Implement delete functionality here");
+    }
+  }
+
 }

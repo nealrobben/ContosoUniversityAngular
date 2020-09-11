@@ -16,4 +16,10 @@ export class CourseOverviewComponent {
     }, error => console.error(error));
   }
 
+  public deleteCourse(id: string, name: string) {
+    if (confirm("Delete course: " + name + "?")) {
+      console.log("Implement delete functionality here");
+    }
+  }
+
 }

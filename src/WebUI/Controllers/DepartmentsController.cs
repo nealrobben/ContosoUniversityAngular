@@ -1,4 +1,5 @@
-﻿using ContosoUniversityAngular.Application.Departments.Queries.GetDepartmentDetails;
+﻿using ContosoUniversityAngular.Application.Departments.Commands.DeleteDepartment;
+using ContosoUniversityAngular.Application.Departments.Queries.GetDepartmentDetails;
 using ContosoUniversityAngular.Application.Departments.Queries.GetDepartmentsOverview;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,16 @@ namespace ContosoUniversityAngular.WebUI.Controllers
             var vm = await Mediator.Send(new GetDepartmentDetailsQuery(int.Parse(id)));
 
             return Ok(vm);
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Delete(string id)
+        {
+            await Mediator.Send(new DeleteDepartmentCommand(int.Parse(id)));
+
+            return NoContent();
         }
     }
 }

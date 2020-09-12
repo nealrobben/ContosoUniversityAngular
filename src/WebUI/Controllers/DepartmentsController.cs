@@ -1,6 +1,7 @@
 ﻿using ContosoUniversityAngular.Application.Departments.Commands.DeleteDepartment;
 using ContosoUniversityAngular.Application.Departments.Queries.GetDepartmentDetails;
 using ContosoUniversityAngular.Application.Departments.Queries.GetDepartmentsOverview;
+using ContosoUniversityCQRS.Application.Departments.Commands.CreateDepartment;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -33,6 +34,16 @@ namespace ContosoUniversityAngular.WebUI.Controllers
         public async Task<IActionResult> Delete(string id)
         {
             await Mediator.Send(new DeleteDepartmentCommand(int.Parse(id)));
+
+            return NoContent();
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Create([FromBody] CreateDepartmentCommand command)
+        {
+            await Mediator.Send(command);
 
             return NoContent();
         }

@@ -1,10 +1,10 @@
-﻿using ContosoUniversityCQRS.Application.Common.Interfaces;
-using ContosoUniversityCQRS.Domain.Entities;
+﻿using ContosoUniversityAngular.Application.Common.Interfaces;
+using ContosoUniversityAngular.Domain.Entities;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ContosoUniversityCQRS.Application.Departments.Commands.CreateDepartment
+namespace ContosoUniversityAngular.Application.Departments.Commands.CreateDepartment
 {
     public class CreateDepartmentCommandHandler : IRequestHandler<CreateDepartmentCommand>
     {

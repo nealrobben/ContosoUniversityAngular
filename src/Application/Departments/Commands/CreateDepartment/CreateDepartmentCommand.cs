@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using System;
 
-namespace ContosoUniversityCQRS.Application.Departments.Commands.CreateDepartment
+namespace ContosoUniversityAngular.Application.Departments.Commands.CreateDepartment
 {
     public class CreateDepartmentCommand : IRequest
     {

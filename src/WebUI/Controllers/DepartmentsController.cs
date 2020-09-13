@@ -1,7 +1,7 @@
 ﻿using ContosoUniversityAngular.Application.Departments.Commands.DeleteDepartment;
 using ContosoUniversityAngular.Application.Departments.Queries.GetDepartmentDetails;
 using ContosoUniversityAngular.Application.Departments.Queries.GetDepartmentsOverview;
-using ContosoUniversityCQRS.Application.Departments.Commands.CreateDepartment;
+using ContosoUniversityAngular.Application.Departments.Commands.CreateDepartment;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;

@@ -262,6 +262,7 @@ export class CoursesClient implements ICoursesClient {
 
 export interface IDepartmentsClient {
     getAll(): Observable<DepartmentsOverviewVM>;
+    create(command: CreateDepartmentCommand): Observable<void>;
     get(id: string | null): Observable<DepartmentDetailVM>;
     delete(id: string | null): Observable<void>;
 }
@@ -327,6 +328,56 @@ export class DepartmentsClient implements IDepartmentsClient {
         return _observableOf<DepartmentsOverviewVM>(<any>null);
     }
 
+    create(command: CreateDepartmentCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/Departments";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let resultdefault: any = null;
+            let resultDatadefault = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            resultdefault = ProblemDetails.fromJS(resultDatadefault);
+            return throwException("A server side error occurred.", status, _responseText, _headers, resultdefault);
+            }));
+        }
+    }
+
     get(id: string | null): Observable<DepartmentDetailVM> {
         let url_ = this.baseUrl + "/api/Departments/{id}";
         if (id === undefined || id === null)
@@ -387,6 +438,150 @@ export class DepartmentsClient implements IDepartmentsClient {
 
     delete(id: string | null): Observable<void> {
         let url_ = this.baseUrl + "/api/Departments/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+}
+
+export interface IInstructorsClient {
+    delete(id: string | null): Observable<void>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class InstructorsClient implements IInstructorsClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    delete(id: string | null): Observable<void> {
+        let url_ = this.baseUrl + "/api/Instructors/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+}
+
+export interface IStudentsClient {
+    delete(id: string | null): Observable<void>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class StudentsClient implements IStudentsClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    delete(id: string | null): Observable<void> {
+        let url_ = this.baseUrl + "/api/Students/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
@@ -1450,6 +1645,54 @@ export interface IDepartmentDetailVM {
     budget?: number;
     startDate?: Date;
     administratorName?: string | undefined;
+}
+
+export class CreateDepartmentCommand implements ICreateDepartmentCommand {
+    name?: string | undefined;
+    budget?: number;
+    startDate?: Date;
+    instructorID?: number;
+
+    constructor(data?: ICreateDepartmentCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.budget = _data["budget"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.instructorID = _data["instructorID"];
+        }
+    }
+
+    static fromJS(data: any): CreateDepartmentCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateDepartmentCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["budget"] = this.budget;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["instructorID"] = this.instructorID;
+        return data; 
+    }
+}
+
+export interface ICreateDepartmentCommand {
+    name?: string | undefined;
+    budget?: number;
+    startDate?: Date;
+    instructorID?: number;
 }
 
 export class CreateTodoItemCommand implements ICreateTodoItemCommand {

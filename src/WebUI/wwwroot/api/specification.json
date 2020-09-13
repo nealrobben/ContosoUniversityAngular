@@ -139,6 +139,39 @@
             }
           }
         }
+      },
+      "post": {
+        "tags": [
+          "Departments"
+        ],
+        "operationId": "Departments_Create",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDepartmentCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/Departments/{id}": {
@@ -187,6 +220,76 @@
           "Departments"
         ],
         "operationId": "Departments_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Instructors/{id}": {
+      "delete": {
+        "tags": [
+          "Instructors"
+        ],
+        "operationId": "Instructors_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Students/{id}": {
+      "delete": {
+        "tags": [
+          "Students"
+        ],
+        "operationId": "Students_Delete",
         "parameters": [
           {
             "name": "id",
@@ -782,6 +885,28 @@
           "administratorName": {
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "CreateDepartmentCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "budget": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "instructorID": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

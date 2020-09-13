@@ -13,7 +13,7 @@ export class DepartmentCreateComponent {
   public department: CreateDepartmentCommand = new CreateDepartmentCommand();
 
   constructor(private client: DepartmentsClient, private router: Router) {
-
+    this.department.startDate = new Date();
   }
 
   save(form: NgForm) {

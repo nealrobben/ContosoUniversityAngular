@@ -14,7 +14,7 @@ namespace ContosoUniversityAngular.Application.Departments.Commands.CreateDepart
         {
             _context = context;
         }
-        
+
         public async Task<Unit> Handle(CreateDepartmentCommand request, CancellationToken cancellationToken)
         {
             _context.Departments.Add(new Department

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
+import { NgForm } from "@angular/forms";
 
-import { DepartmentsClient, DepartmentsOverviewVM, DepartmentDetailVM } from '../contosouniversityangular-api';
+import { DepartmentsClient, CreateDepartmentCommand,  } from '../contosouniversityangular-api';
 
 @Component({
   selector: 'department-create',
@@ -9,15 +10,15 @@ import { DepartmentsClient, DepartmentsOverviewVM, DepartmentDetailVM } from '..
 })
 export class DepartmentCreateComponent {
 
-  //public vm: DepartmentDetailVM = new DepartmentDetailVM();
+  public department: CreateDepartmentCommand = new CreateDepartmentCommand();
 
-  //constructor(private client: DepartmentsClient, activeRoute: ActivatedRoute) {
+  constructor(private client: DepartmentsClient, private router: Router) {
 
-  //  var departmentId = activeRoute.snapshot.params["id"];
+  }
 
-  //  client.get(departmentId).subscribe(result => {
-  //    this.vm = result;
-  //  }, error => console.error(error));
-  //}
+  save(form: NgForm) {
+    //TODO: implement save
+    this.router.navigateByUrl("/departments");
+  }
 
 }

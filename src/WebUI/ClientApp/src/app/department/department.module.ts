@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 import { DepartmentOverviewComponent } from "./departmentOverview.component";
 import { DepartmentDetailsComponent } from "./departmentDetails.component";
@@ -10,7 +11,7 @@ import { DepartmentComponent } from "./department.component";
 
 @NgModule({
   imports: [
-    CommonModule, RouterModule
+    CommonModule, RouterModule, FormsModule
   ],
   declarations: [
     DepartmentOverviewComponent, DepartmentComponent, DepartmentDetailsComponent, DepartmentEditComponent, DepartmentCreateComponent

@@ -17,8 +17,9 @@ export class CourseCreateComponent {
   }
 
   save(form: NgForm) {
-    this.client.create(this.course);
-    this.router.navigateByUrl("/courses");
+    this.client.create(this.course).subscribe(result => {
+      this.router.navigateByUrl("/courses");
+    }, error => console.error(error));
   }
 
 }

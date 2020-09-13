@@ -17,8 +17,9 @@ export class DepartmentCreateComponent {
   }
 
   save(form: NgForm) {
-    this.client.create(this.department);
-    this.router.navigateByUrl("/departments");
+    this.client.create(this.department).subscribe(result => {
+      this.router.navigateByUrl("/departments");
+    }, error => console.error(error));
   }
 
 }

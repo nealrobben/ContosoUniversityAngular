@@ -17,7 +17,7 @@ export class DepartmentCreateComponent {
   }
 
   save(form: NgForm) {
-    //TODO: implement save
+    this.client.create(this.department);
     this.router.navigateByUrl("/departments");
   }
 

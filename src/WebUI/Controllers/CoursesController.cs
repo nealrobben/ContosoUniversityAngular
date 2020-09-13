@@ -1,4 +1,5 @@
-﻿using ContosoUniversityAngular.Application.Courses.Commands.DeleteCourse;
+﻿using ContosoUniversityAngular.Application.Courses.Commands.CreateCourse;
+using ContosoUniversityAngular.Application.Courses.Commands.DeleteCourse;
 using ContosoUniversityAngular.Application.Courses.Queries.GetCourseDetails;
 using ContosoUniversityAngular.Application.Courses.Queries.GetCoursesOverview;
 using Microsoft.AspNetCore.Http;
@@ -33,6 +34,16 @@ namespace ContosoUniversityAngular.WebUI.Controllers
         public async Task<IActionResult> Delete(string id)
         {
             await Mediator.Send(new DeleteCourseCommand(int.Parse(id)));
+
+            return NoContent();
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Create([FromBody] CreateCourseCommand command)
+        {
+            await Mediator.Send(command);
 
             return NoContent();
         }

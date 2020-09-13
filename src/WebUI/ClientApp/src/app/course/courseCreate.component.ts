@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
+import { Router } from "@angular/router";
+import { NgForm } from "@angular/forms";
 
-import { CoursesClient, CoursesOverviewVM, CourseDetailVM } from '../contosouniversityangular-api';
+import { CoursesClient, CreateCourseCommand } from '../contosouniversityangular-api';
 
 @Component({
   selector: 'course-create',
@@ -9,15 +10,15 @@ import { CoursesClient, CoursesOverviewVM, CourseDetailVM } from '../contosouniv
 })
 export class CourseCreateComponent {
 
-  //public vm: CourseDetailVM = new CourseDetailVM();
+  public course: CreateCourseCommand = new CreateCourseCommand();
 
-  //constructor(private client: CoursesClient, activeRoute: ActivatedRoute) {
+  constructor(private client: CoursesClient, private router: Router) {
 
-  //  var courseId = activeRoute.snapshot.params["id"];
+  }
 
-  //  client.get(courseId).subscribe(result => {
-  //    this.vm = result;
-  //  }, error => console.error(error));
-  //}
+  save(form: NgForm) {
+    this.client.create(this.course);
+    this.router.navigateByUrl("/courses");
+  }
 
 }

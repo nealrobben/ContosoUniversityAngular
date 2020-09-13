@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router, ActivatedRoute } from "@angular/router";
+import { Router } from "@angular/router";
 import { NgForm } from "@angular/forms";
 
 import { DepartmentsClient, CreateDepartmentCommand,  } from '../contosouniversityangular-api';

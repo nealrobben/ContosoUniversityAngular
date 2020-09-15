@@ -13,13 +13,19 @@ export class DepartmentCreateComponent {
   public department: CreateDepartmentCommand = new CreateDepartmentCommand();
 
   constructor(private client: DepartmentsClient, private router: Router) {
-    this.department.startDate = new Date();
+    //this.department.startDate = new Date();
   }
 
   save(form: NgForm) {
-    this.client.create(this.department).subscribe(result => {
-      this.router.navigateByUrl("/departments");
-    }, error => console.error(error));
+
+    if (form.valid) {
+      this.client.create(this.department).subscribe(result => {
+        this.router.navigateByUrl("/departments");
+      }, error => console.error(error));
+    }
+    else {
+      console.log("form invalid");
+    }
   }
 
 }

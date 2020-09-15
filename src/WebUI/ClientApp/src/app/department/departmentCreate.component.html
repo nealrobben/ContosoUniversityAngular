@@ -8,19 +8,23 @@
     <form novalidate #form="ngForm" (ngSubmit)="save(form)">
       <div class="form-group">
         <label>Name</label>
-        <input class="form-control" name="name" required  [(ngModel)]="department.name" />
+        <input class="form-control" name="name" required  [(ngModel)]="department.name" #name="ngModel" />
+        <p *ngIf="name.errors?.required && form.submitted" class="text-danger">Name is required</p>
       </div>
       <div class="form-group">
         <label>Budget</label>
-        <input class="form-control" name="budget" type="number" required [(ngModel)]="department.budget" />
+        <input class="form-control" name="budget" type="number" required [(ngModel)]="department.budget" #budget="ngModel" />
+        <p *ngIf="budget.errors?.required && form.submitted" class="text-danger">Budget is required</p>
       </div>
       <div class="form-group">
         <label>StartDate</label>
-        <input class="form-control" name="startDate" type="date" [(ngModel)]="department.startDate" />
+        <input class="form-control" name="startDate" type="date" [(ngModel)]="department.startDate" #startDate="ngModel" />
+        <p *ngIf="startDate.errors?.required && form.submitted" class="text-danger">StartDate is required</p>
       </div>
       <div class="form-group">
         <label>Instructor</label>
-        <input class="form-control" name="instructorID" [(ngModel)]="department.instructorID" />
+        <input class="form-control" name="instructorID" [(ngModel)]="department.instructorID" #instructor="ngModel" />
+        <p *ngIf="instructor.errors?.required && form.submitted" class="text-danger">Instructor is required</p>
       </div>
       <button type="submit" class="btn btn-primary m-1">
         Create

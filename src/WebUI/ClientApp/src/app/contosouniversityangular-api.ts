@@ -543,6 +543,7 @@ export class DepartmentsClient implements IDepartmentsClient {
 }
 
 export interface IInstructorsClient {
+    getAll(): Observable<InstructorsOverviewVM>;
     delete(id: string | null): Observable<void>;
 }
 
@@ -557,6 +558,54 @@ export class InstructorsClient implements IInstructorsClient {
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
         this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    getAll(): Observable<InstructorsOverviewVM> {
+        let url_ = this.baseUrl + "/api/Instructors";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(<any>response_);
+                } catch (e) {
+                    return <Observable<InstructorsOverviewVM>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<InstructorsOverviewVM>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<InstructorsOverviewVM> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = InstructorsOverviewVM.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<InstructorsOverviewVM>(<any>null);
     }
 
     delete(id: string | null): Observable<void> {
@@ -1792,6 +1841,102 @@ export interface ICreateDepartmentCommand {
     budget?: number;
     startDate?: Date;
     instructorID?: number;
+}
+
+export class InstructorsOverviewVM implements IInstructorsOverviewVM {
+    instructors?: InstructorVM[] | undefined;
+
+    constructor(data?: IInstructorsOverviewVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["instructors"])) {
+                this.instructors = [] as any;
+                for (let item of _data["instructors"])
+                    this.instructors!.push(InstructorVM.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): InstructorsOverviewVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new InstructorsOverviewVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.instructors)) {
+            data["instructors"] = [];
+            for (let item of this.instructors)
+                data["instructors"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IInstructorsOverviewVM {
+    instructors?: InstructorVM[] | undefined;
+}
+
+export class InstructorVM implements IInstructorVM {
+    instructorID?: number;
+    lastName?: string | undefined;
+    firstName?: string | undefined;
+    hireDate?: Date;
+    officeLocation?: string | undefined;
+
+    constructor(data?: IInstructorVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.instructorID = _data["instructorID"];
+            this.lastName = _data["lastName"];
+            this.firstName = _data["firstName"];
+            this.hireDate = _data["hireDate"] ? new Date(_data["hireDate"].toString()) : <any>undefined;
+            this.officeLocation = _data["officeLocation"];
+        }
+    }
+
+    static fromJS(data: any): InstructorVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new InstructorVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["instructorID"] = this.instructorID;
+        data["lastName"] = this.lastName;
+        data["firstName"] = this.firstName;
+        data["hireDate"] = this.hireDate ? this.hireDate.toISOString() : <any>undefined;
+        data["officeLocation"] = this.officeLocation;
+        return data; 
+    }
+}
+
+export interface IInstructorVM {
+    instructorID?: number;
+    lastName?: string | undefined;
+    firstName?: string | undefined;
+    hireDate?: Date;
+    officeLocation?: string | undefined;
 }
 
 export class CreateTodoItemCommand implements ICreateTodoItemCommand {

@@ -282,6 +282,26 @@
         }
       }
     },
+    "/api/Instructors": {
+      "get": {
+        "tags": [
+          "Instructors"
+        ],
+        "operationId": "Instructors_GetAll",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstructorsOverviewVM"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Instructors/{id}": {
       "delete": {
         "tags": [
@@ -962,6 +982,45 @@
           "instructorID": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "InstructorsOverviewVM": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "instructors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/InstructorVM"
+            }
+          }
+        }
+      },
+      "InstructorVM": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "instructorID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "hireDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "officeLocation": {
+            "type": "string",
+            "nullable": true
           }
         }
       },

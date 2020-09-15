@@ -302,6 +302,26 @@
         }
       }
     },
+    "/api/Instructors/Lookup": {
+      "get": {
+        "tags": [
+          "Instructors"
+        ],
+        "operationId": "Instructors_GetLookup",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstructorsOverviewVM"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Instructors/{id}": {
       "delete": {
         "tags": [

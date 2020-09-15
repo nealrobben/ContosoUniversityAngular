@@ -1,4 +1,5 @@
 ﻿using ContosoUniversityAngular.Application.Instructors.Commands.DeleteInstructor;
+using ContosoUniversityAngular.Application.Instructors.Queries.GetInstructorsLookup;
 using ContosoUniversityCQRS.Application.Instructors.Queries.GetInstructorsOverview;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,14 @@ namespace ContosoUniversityAngular.WebUI.Controllers
         public async Task<ActionResult<InstructorsOverviewVM>> GetAll()
         {
             var vm = await Mediator.Send(new GetInstructorsOverviewQuery());
+
+            return Ok(vm);
+        }
+
+        [HttpGet("Lookup")]
+        public async Task<ActionResult<InstructorsOverviewVM>> GetLookup()
+        {
+            var vm = await Mediator.Send(new GetInstructorLookupQuery());
 
             return Ok(vm);
         }

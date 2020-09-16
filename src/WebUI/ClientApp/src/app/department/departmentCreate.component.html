@@ -23,7 +23,10 @@
       </div>
       <div class="form-group">
         <label>Instructor</label>
-        <input class="form-control" name="instructorID" [(ngModel)]="department.instructorID" #instructor="ngModel" />
+        <!--<input class="form-control" name="instructorID" [(ngModel)]="department.instructorID" #instructor="ngModel" />-->
+        <select name="instructorID" #instructor="ngModel" [(ngModel)]="department.instructorID">
+          <option *ngFor="let item of instructorsLookupVM.instructors" [value]="item.id">{{item.fullName}}</option>
+        </select>
         <p *ngIf="instructor.errors?.required && form.submitted" class="text-danger">Instructor is required</p>
       </div>
       <button type="submit" class="btn btn-primary m-1">

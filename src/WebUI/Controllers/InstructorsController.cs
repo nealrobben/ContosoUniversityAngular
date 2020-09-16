@@ -17,8 +17,8 @@ namespace ContosoUniversityAngular.WebUI.Controllers
             return Ok(vm);
         }
 
-        [HttpGet("Lookup")]
-        public async Task<ActionResult<InstructorsOverviewVM>> GetLookup()
+        [HttpGet("lookup")]
+        public async Task<ActionResult<InstructorsLookupVM>> GetLookup()
         {
             var vm = await Mediator.Send(new GetInstructorLookupQuery());
 

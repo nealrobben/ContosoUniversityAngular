@@ -316,6 +316,7 @@ export interface IDepartmentsClient {
     create(command: CreateDepartmentCommand): Observable<void>;
     get(id: string | null): Observable<DepartmentDetailVM>;
     delete(id: string | null): Observable<void>;
+    getLookup(): Observable<DepartmentsLookupVM>;
 }
 
 @Injectable({
@@ -540,11 +541,59 @@ export class DepartmentsClient implements IDepartmentsClient {
         }
         return _observableOf<void>(<any>null);
     }
+
+    getLookup(): Observable<DepartmentsLookupVM> {
+        let url_ = this.baseUrl + "/api/Departments/lookup";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetLookup(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetLookup(<any>response_);
+                } catch (e) {
+                    return <Observable<DepartmentsLookupVM>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<DepartmentsLookupVM>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetLookup(response: HttpResponseBase): Observable<DepartmentsLookupVM> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = DepartmentsLookupVM.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<DepartmentsLookupVM>(<any>null);
+    }
 }
 
 export interface IInstructorsClient {
     getAll(): Observable<InstructorsOverviewVM>;
-    getLookup(): Observable<InstructorsOverviewVM>;
+    getLookup(): Observable<InstructorsLookupVM>;
     delete(id: string | null): Observable<void>;
 }
 
@@ -609,8 +658,8 @@ export class InstructorsClient implements IInstructorsClient {
         return _observableOf<InstructorsOverviewVM>(<any>null);
     }
 
-    getLookup(): Observable<InstructorsOverviewVM> {
-        let url_ = this.baseUrl + "/api/Instructors/Lookup";
+    getLookup(): Observable<InstructorsLookupVM> {
+        let url_ = this.baseUrl + "/api/Instructors/lookup";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -628,14 +677,14 @@ export class InstructorsClient implements IInstructorsClient {
                 try {
                     return this.processGetLookup(<any>response_);
                 } catch (e) {
-                    return <Observable<InstructorsOverviewVM>><any>_observableThrow(e);
+                    return <Observable<InstructorsLookupVM>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<InstructorsOverviewVM>><any>_observableThrow(response_);
+                return <Observable<InstructorsLookupVM>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetLookup(response: HttpResponseBase): Observable<InstructorsOverviewVM> {
+    protected processGetLookup(response: HttpResponseBase): Observable<InstructorsLookupVM> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -646,7 +695,7 @@ export class InstructorsClient implements IInstructorsClient {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = InstructorsOverviewVM.fromJS(resultData200);
+            result200 = InstructorsLookupVM.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -654,7 +703,7 @@ export class InstructorsClient implements IInstructorsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<InstructorsOverviewVM>(<any>null);
+        return _observableOf<InstructorsLookupVM>(<any>null);
     }
 
     delete(id: string | null): Observable<void> {
@@ -1844,6 +1893,90 @@ export interface IDepartmentDetailVM {
     administratorName?: string | undefined;
 }
 
+export class DepartmentsLookupVM implements IDepartmentsLookupVM {
+    departments?: DepartmentLookupVM[] | undefined;
+
+    constructor(data?: IDepartmentsLookupVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["departments"])) {
+                this.departments = [] as any;
+                for (let item of _data["departments"])
+                    this.departments!.push(DepartmentLookupVM.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): DepartmentsLookupVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new DepartmentsLookupVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.departments)) {
+            data["departments"] = [];
+            for (let item of this.departments)
+                data["departments"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IDepartmentsLookupVM {
+    departments?: DepartmentLookupVM[] | undefined;
+}
+
+export class DepartmentLookupVM implements IDepartmentLookupVM {
+    departmentID?: number;
+    name?: string | undefined;
+
+    constructor(data?: IDepartmentLookupVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.departmentID = _data["departmentID"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): DepartmentLookupVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new DepartmentLookupVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["departmentID"] = this.departmentID;
+        data["name"] = this.name;
+        return data; 
+    }
+}
+
+export interface IDepartmentLookupVM {
+    departmentID?: number;
+    name?: string | undefined;
+}
+
 export class CreateDepartmentCommand implements ICreateDepartmentCommand {
     name?: string | undefined;
     budget?: number;
@@ -1986,6 +2119,90 @@ export interface IInstructorVM {
     firstName?: string | undefined;
     hireDate?: Date;
     officeLocation?: string | undefined;
+}
+
+export class InstructorsLookupVM implements IInstructorsLookupVM {
+    instructors?: InstructorLookupVM[] | undefined;
+
+    constructor(data?: IInstructorsLookupVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["instructors"])) {
+                this.instructors = [] as any;
+                for (let item of _data["instructors"])
+                    this.instructors!.push(InstructorLookupVM.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): InstructorsLookupVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new InstructorsLookupVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.instructors)) {
+            data["instructors"] = [];
+            for (let item of this.instructors)
+                data["instructors"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IInstructorsLookupVM {
+    instructors?: InstructorLookupVM[] | undefined;
+}
+
+export class InstructorLookupVM implements IInstructorLookupVM {
+    id?: number;
+    fullName?: string | undefined;
+
+    constructor(data?: IInstructorLookupVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.fullName = _data["fullName"];
+        }
+    }
+
+    static fromJS(data: any): InstructorLookupVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new InstructorLookupVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["fullName"] = this.fullName;
+        return data; 
+    }
+}
+
+export interface IInstructorLookupVM {
+    id?: number;
+    fullName?: string | undefined;
 }
 
 export class CreateTodoItemCommand implements ICreateTodoItemCommand {

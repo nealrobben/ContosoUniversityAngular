@@ -4,14 +4,13 @@ using ContosoUniversityAngular.Application.Common.Interfaces;
 using ContosoUniversityAngular.Application.Instructors.Queries.GetInstructorsLookup;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace ContosoUniversityCQRS.Application.Instructors.Queries.GetInstructorsLookup
 {
-    public class GetInstructorLookupQueryHandler : IRequestHandler<GetInstructorLookupQuery, List<InstructorLookupVM>>
+    public class GetInstructorLookupQueryHandler : IRequestHandler<GetInstructorLookupQuery, InstructorsLookupVM>
     {
         private readonly ISchoolContext _context;
         private readonly IMapper _mapper;
@@ -22,13 +21,15 @@ namespace ContosoUniversityCQRS.Application.Instructors.Queries.GetInstructorsLo
             _mapper = mapper;
         }
 
-        public async Task<List<InstructorLookupVM>> Handle(GetInstructorLookupQuery request, CancellationToken cancellationToken)
+        public async Task<InstructorsLookupVM> Handle(GetInstructorLookupQuery request, CancellationToken cancellationToken)
         {
-            return await _context.Instructors
+            var instructors = await _context.Instructors
                 .AsNoTracking()
                 .OrderBy(x => x.LastName)
                 .ProjectTo<InstructorLookupVM>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
+
+            return new InstructorsLookupVM(instructors);
         }
     }
 }

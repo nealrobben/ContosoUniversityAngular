@@ -5,6 +5,7 @@ using ContosoUniversityAngular.Application.Departments.Commands.CreateDepartment
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using ContosoUniversityAngular.Application.Departments.Queries.GetDepartmentsLookup;
 
 namespace ContosoUniversityAngular.WebUI.Controllers
 {
@@ -24,6 +25,14 @@ namespace ContosoUniversityAngular.WebUI.Controllers
         public async Task<ActionResult<DepartmentDetailVM>> Get(string id)
         {
             var vm = await Mediator.Send(new GetDepartmentDetailsQuery(int.Parse(id)));
+
+            return Ok(vm);
+        }
+
+        [HttpGet("lookup")]
+        public async Task<ActionResult<DepartmentsLookupVM>> GetLookup()
+        {
+            var vm = await Mediator.Send(new GetDepartmentsLookupQuery());
 
             return Ok(vm);
         }

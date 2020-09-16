@@ -1,10 +1,8 @@
-﻿using ContosoUniversityAngular.Application.Instructors.Queries.GetInstructorsLookup;
-using MediatR;
-using System.Collections.Generic;
+﻿using MediatR;
 
 namespace ContosoUniversityAngular.Application.Instructors.Queries.GetInstructorsLookup
 {
-    public class GetInstructorLookupQuery : IRequest<List<InstructorLookupVM>>
+    public class GetInstructorLookupQuery : IRequest<InstructorsLookupVM>
     {
     }
 }

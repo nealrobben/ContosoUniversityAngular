@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from "@angular/router";
 import { NgForm } from "@angular/forms";
 
-import { DepartmentsClient, CreateDepartmentCommand,  } from '../contosouniversityangular-api';
+import { DepartmentsClient, CreateDepartmentCommand, InstructorsClient, InstructorsLookupVM } from '../contosouniversityangular-api';
 
 @Component({
   selector: 'department-create',
@@ -11,9 +11,15 @@ import { DepartmentsClient, CreateDepartmentCommand,  } from '../contosouniversi
 export class DepartmentCreateComponent {
 
   public department: CreateDepartmentCommand = new CreateDepartmentCommand();
+  public instructorsLookupVM: InstructorsLookupVM = new InstructorsLookupVM();
 
-  constructor(private client: DepartmentsClient, private router: Router) {
+  constructor(private client: DepartmentsClient, private instructorsClient: InstructorsClient, private router: Router) {
     //this.department.startDate = new Date();
+
+    instructorsClient.getLookup().subscribe(result => {
+      this.instructorsLookupVM = result;
+      console.log(result.instructors.length);
+    }, error => console.error(error));
   }
 
   save(form: NgForm) {

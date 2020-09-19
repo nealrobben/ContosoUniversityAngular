@@ -19,6 +19,7 @@ namespace ContosoUniversityAngular.Application.Courses.Commands.CreateCourse
         {
             var course = new Course
             {
+                CourseID = request.CourseID,
                 Title = request.Title,
                 Credits = request.Credits,
                 DepartmentID = request.DepartmentID

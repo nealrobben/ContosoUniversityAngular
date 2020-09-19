@@ -1698,6 +1698,7 @@ export interface IProblemDetails {
 }
 
 export class CreateCourseCommand implements ICreateCourseCommand {
+    courseID?: number;
     title?: string | undefined;
     credits?: number;
     departmentID?: number;
@@ -1713,6 +1714,7 @@ export class CreateCourseCommand implements ICreateCourseCommand {
 
     init(_data?: any) {
         if (_data) {
+            this.courseID = _data["courseID"];
             this.title = _data["title"];
             this.credits = _data["credits"];
             this.departmentID = _data["departmentID"];
@@ -1728,6 +1730,7 @@ export class CreateCourseCommand implements ICreateCourseCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["courseID"] = this.courseID;
         data["title"] = this.title;
         data["credits"] = this.credits;
         data["departmentID"] = this.departmentID;
@@ -1736,6 +1739,7 @@ export class CreateCourseCommand implements ICreateCourseCommand {
 }
 
 export interface ICreateCourseCommand {
+    courseID?: number;
     title?: string | undefined;
     credits?: number;
     departmentID?: number;

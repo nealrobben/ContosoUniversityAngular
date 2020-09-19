@@ -7,6 +7,11 @@
   <div class="col-md-4">
     <form novalidate #form="ngForm" (ngSubmit)="save(form)">
       <div class="form-group">
+        <label>CourseID</label>
+        <input class="form-control" name="courseID" type="number" required [(ngModel)]="course.courseID" #courseID="ngModel" />
+        <p *ngIf="courseID.errors?.required && form.submitted" class="text-danger">CourseID is required</p>
+      </div>
+      <div class="form-group">
         <label>Title</label>
         <input class="form-control" name="title" required [(ngModel)]="course.title" #title="ngModel" />
         <p *ngIf="title.errors?.required && form.submitted" class="text-danger">Title is required</p>
@@ -19,8 +24,8 @@
       <div class="form-group">
         <label>DepartmentID</label>
         <div>
-          <select name="departmentID" #department="ngModel" [(ngModel)]="course.departmentID">
-            <option *ngFor="let item of departmentsLookupVM.departments" [ngValue]="item.id">{{item.name}}</option>
+          <select name="departmentID" #department="ngModel" required [(ngModel)]="course.departmentID">
+            <option *ngFor="let item of departmentsLookupVM.departments" [ngValue]="item.departmentID">{{item.name}}</option>
           </select>
           <p *ngIf="department.errors?.required && form.submitted" class="text-danger">DepartmentID is required</p>
         </div>

@@ -920,10 +920,6 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "courseID": {
-            "type": "integer",
-            "format": "int32"
-          },
           "title": {
             "type": "string",
             "nullable": true

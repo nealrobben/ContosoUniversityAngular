@@ -1,6 +1,5 @@
 ﻿using ContosoUniversityAngular.Application.Common.Interfaces;
 using MediatR;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
@@ -10,7 +9,7 @@ using AutoMapper.QueryableExtensions;
 
 namespace ContosoUniversityAngular.Application.Departments.Queries.GetDepartmentsLookup
 {
-    public class GetDepartmentsLookupQueryHandler : IRequestHandler<GetDepartmentsLookupQuery, List<DepartmentLookupVM>>
+    public class GetDepartmentsLookupQueryHandler : IRequestHandler<GetDepartmentsLookupQuery, DepartmentsLookupVM>
     {
         private readonly ISchoolContext _context;
         private readonly IMapper _mapper;
@@ -21,13 +20,15 @@ namespace ContosoUniversityAngular.Application.Departments.Queries.GetDepartment
             _mapper = mapper;
         }
 
-        public async Task<List<DepartmentLookupVM>> Handle(GetDepartmentsLookupQuery request, CancellationToken cancellationToken)
+        public async Task<DepartmentsLookupVM> Handle(GetDepartmentsLookupQuery request, CancellationToken cancellationToken)
         {
-            return await _context.Departments
+            var list = await _context.Departments
                 .AsNoTracking()
                 .OrderBy(x => x.Name)
                 .ProjectTo<DepartmentLookupVM>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
+
+            return new DepartmentsLookupVM(list);
         }
     }
 }

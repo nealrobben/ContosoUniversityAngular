@@ -25,9 +25,9 @@ namespace ContosoUniversityAngular.Application.Instructors.Queries.GetInstructor
 
         public async Task<InstructorsOverviewVM> Handle(GetInstructorsOverviewQuery request, CancellationToken cancellationToken)
         {
-            return new InstructorsOverviewVM(new List<InstructorVM>());
+            //return new InstructorsOverviewVM(new List<InstructorVM>());
 
-            //List<InstructorVM> instructorVMs = await GetInstructors(cancellationToken);
+            List<InstructorVM> instructorVMs = await GetInstructors(cancellationToken);
             //List<CourseVM> courseVMs = await GetCourses(request, cancellationToken);
             //List<EnrollmentVM> enrollments = await GetEnrollments(request, cancellationToken);
 
@@ -39,24 +39,26 @@ namespace ContosoUniversityAngular.Application.Instructors.Queries.GetInstructor
             //    Courses = courseVMs,
             //    Enrollments = enrollments
             //};
+
+            return new InstructorsOverviewVM(instructorVMs);
         }
 
-        //private async Task<List<InstructorVM>> GetInstructors(CancellationToken cancellationToken)
-        //{
-        //    return await _context.Instructors
-        //          .Include(i => i.OfficeAssignment)
-        //          .Include(i => i.CourseAssignments)
-        //            .ThenInclude(i => i.Course)
-        //                .ThenInclude(i => i.Enrollments)
-        //                    .ThenInclude(i => i.Student)
-        //          .Include(i => i.CourseAssignments)
-        //            .ThenInclude(i => i.Course)
-        //                .ThenInclude(i => i.Department)
-        //          .AsNoTracking()
-        //          .OrderBy(i => i.LastName)
-        //          .ProjectTo<InstructorVM>(_mapper.ConfigurationProvider)
-        //          .ToListAsync(cancellationToken);
-        //}
+        private async Task<List<InstructorVM>> GetInstructors(CancellationToken cancellationToken)
+        {
+            return await _context.Instructors
+                  .Include(i => i.OfficeAssignment)
+                  .Include(i => i.CourseAssignments)
+                    .ThenInclude(i => i.Course)
+                        .ThenInclude(i => i.Enrollments)
+                            .ThenInclude(i => i.Student)
+                  .Include(i => i.CourseAssignments)
+                    .ThenInclude(i => i.Course)
+                        .ThenInclude(i => i.Department)
+                  .AsNoTracking()
+                  .OrderBy(i => i.LastName)
+                  .ProjectTo<InstructorVM>(_mapper.ConfigurationProvider)
+                  .ToListAsync(cancellationToken);
+        }
 
         //private async Task<List<CourseVM>> GetCourses(GetInstructorsOverviewQuery request, CancellationToken cancellationToken)
         //{

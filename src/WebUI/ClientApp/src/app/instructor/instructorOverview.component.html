@@ -1,6 +1,42 @@
-Placeholder for instructors overview
+<h2>Instructors</h2>
 
-<a routerLink="/instructors/create" routerLinkActive="active">Create new</a>
+<p>
+  <a routerLink="/instructors/create" routerLinkActive="active">Create New</a>
+</p>
 
-<a routerLink="/instructors/details" routerLinkActive="active">Details</a>
-<a routerLink="/instructors/edit" routerLinkActive="active">Edit</a>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Last Name</th>
+      <th>First Name</th>
+      <th>Hire Date</th>
+      <th>Office</th>
+      <th>Courses</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let instructor of vm.instructors">
+      <td>
+        {{instructor.lastName}}
+      </td>
+      <td>
+        {{instructor.firstName}}
+      </td>
+      <td>
+        {{instructor.hireDate | date:'yyyy-MM-dd'}}
+      </td>
+      <td>
+        {{instructor.officeLocation}}
+      </td>
+      <td>
+        COURSES
+      </td>
+      <td>
+        <a [routerLink]="['/instructors/edit', instructor.instructorID]" routerLinkActive="active">Edit</a> |
+        <a [routerLink]="['/instructors/details', instructor.instructorID]" routerLinkActive="active">Details</a> |
+        <a (click)="deleteDepartment(instructor.instructorID, instructor.name)">Delete</a>
+      </td>
+    </tr>
+  </tbody>
+</table>

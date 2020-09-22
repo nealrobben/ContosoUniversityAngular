@@ -35,7 +35,7 @@
       <td>
         <a [routerLink]="['/instructors/edit', instructor.instructorID]" routerLinkActive="active">Edit</a> |
         <a [routerLink]="['/instructors/details', instructor.instructorID]" routerLinkActive="active">Details</a> |
-        <a (click)="deleteDepartment(instructor.instructorID, instructor.name)">Delete</a>
+        <a (click)="deleteInstructor(instructor.instructorID, instructor.lastName + ', ' + instructor.firstName)">Delete</a>
       </td>
     </tr>
   </tbody>

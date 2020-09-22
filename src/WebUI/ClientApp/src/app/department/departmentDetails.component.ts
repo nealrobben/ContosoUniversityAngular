@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 
-import { DepartmentsClient, DepartmentsOverviewVM, DepartmentDetailVM } from '../contosouniversityangular-api';
+import { DepartmentsClient, DepartmentDetailVM } from '../contosouniversityangular-api';
 
 @Component({
   selector: 'department-details',

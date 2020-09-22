@@ -593,8 +593,9 @@ export class DepartmentsClient implements IDepartmentsClient {
 
 export interface IInstructorsClient {
     getAll(): Observable<InstructorsOverviewVM>;
-    getLookup(): Observable<InstructorsLookupVM>;
+    get(id: string | null): Observable<InstructorDetailsVM>;
     delete(id: string | null): Observable<void>;
+    getLookup(): Observable<InstructorsLookupVM>;
 }
 
 @Injectable({
@@ -658,8 +659,11 @@ export class InstructorsClient implements IInstructorsClient {
         return _observableOf<InstructorsOverviewVM>(<any>null);
     }
 
-    getLookup(): Observable<InstructorsLookupVM> {
-        let url_ = this.baseUrl + "/api/Instructors/lookup";
+    get(id: string | null): Observable<InstructorDetailsVM> {
+        let url_ = this.baseUrl + "/api/Instructors/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -671,20 +675,20 @@ export class InstructorsClient implements IInstructorsClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetLookup(response_);
+            return this.processGet(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetLookup(<any>response_);
+                    return this.processGet(<any>response_);
                 } catch (e) {
-                    return <Observable<InstructorsLookupVM>><any>_observableThrow(e);
+                    return <Observable<InstructorDetailsVM>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<InstructorsLookupVM>><any>_observableThrow(response_);
+                return <Observable<InstructorDetailsVM>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetLookup(response: HttpResponseBase): Observable<InstructorsLookupVM> {
+    protected processGet(response: HttpResponseBase): Observable<InstructorDetailsVM> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -695,15 +699,22 @@ export class InstructorsClient implements IInstructorsClient {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = InstructorsLookupVM.fromJS(resultData200);
+            result200 = InstructorDetailsVM.fromJS(resultData200);
             return _observableOf(result200);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result404);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<InstructorsLookupVM>(<any>null);
+        return _observableOf<InstructorDetailsVM>(<any>null);
     }
 
     delete(id: string | null): Observable<void> {
@@ -758,6 +769,54 @@ export class InstructorsClient implements IInstructorsClient {
             }));
         }
         return _observableOf<void>(<any>null);
+    }
+
+    getLookup(): Observable<InstructorsLookupVM> {
+        let url_ = this.baseUrl + "/api/Instructors/lookup";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetLookup(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetLookup(<any>response_);
+                } catch (e) {
+                    return <Observable<InstructorsLookupVM>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<InstructorsLookupVM>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetLookup(response: HttpResponseBase): Observable<InstructorsLookupVM> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = InstructorsLookupVM.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<InstructorsLookupVM>(<any>null);
     }
 }
 
@@ -2119,6 +2178,54 @@ export interface IInstructorVM {
     firstName?: string | undefined;
     hireDate?: Date;
     officeLocation?: string | undefined;
+}
+
+export class InstructorDetailsVM implements IInstructorDetailsVM {
+    instructorID?: number;
+    lastName?: string | undefined;
+    firstName?: string | undefined;
+    hireDate?: Date;
+
+    constructor(data?: IInstructorDetailsVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.instructorID = _data["instructorID"];
+            this.lastName = _data["lastName"];
+            this.firstName = _data["firstName"];
+            this.hireDate = _data["hireDate"] ? new Date(_data["hireDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): InstructorDetailsVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new InstructorDetailsVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["instructorID"] = this.instructorID;
+        data["lastName"] = this.lastName;
+        data["firstName"] = this.firstName;
+        data["hireDate"] = this.hireDate ? this.hireDate.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IInstructorDetailsVM {
+    instructorID?: number;
+    lastName?: string | undefined;
+    firstName?: string | undefined;
+    hireDate?: Date;
 }
 
 export class InstructorsLookupVM implements IInstructorsLookupVM {

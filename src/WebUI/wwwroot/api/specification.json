@@ -322,27 +322,47 @@
         }
       }
     },
-    "/api/Instructors/lookup": {
+    "/api/Instructors/{id}": {
       "get": {
         "tags": [
           "Instructors"
         ],
-        "operationId": "Instructors_GetLookup",
+        "operationId": "Instructors_Get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
         "responses": {
           "200": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InstructorsLookupVM"
+                  "$ref": "#/components/schemas/InstructorDetailsVM"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
           }
         }
-      }
-    },
-    "/api/Instructors/{id}": {
+      },
       "delete": {
         "tags": [
           "Instructors"
@@ -370,6 +390,26 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Instructors/lookup": {
+      "get": {
+        "tags": [
+          "Instructors"
+        ],
+        "operationId": "Instructors_GetLookup",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstructorsLookupVM"
                 }
               }
             }
@@ -1088,6 +1128,28 @@
           "officeLocation": {
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "InstructorDetailsVM": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "instructorID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "hireDate": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },

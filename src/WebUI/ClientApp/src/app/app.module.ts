@@ -87,9 +87,9 @@ import { InstructorEditComponent } from './instructor/instructorEdit.component';
       {
         path: 'instructors', component: InstructorComponent,
         children: [
-          { path: "details", component: InstructorDetailsComponent },
+          { path: "details/:id", component: InstructorDetailsComponent },
           { path: "create", component: InstructorCreateComponent },
-          { path: "edit", component: InstructorEditComponent },
+          { path: "edit/:id", component: InstructorEditComponent },
           { path: "**", component: InstructorOverviewComponent }
         ]
       },

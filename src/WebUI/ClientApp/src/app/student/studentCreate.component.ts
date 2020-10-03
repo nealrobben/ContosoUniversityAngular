@@ -12,7 +12,7 @@ export class StudentCreateComponent {
 
   public student: CreateStudentCommand = new CreateStudentCommand();
 
-  constructor(private client: StudentsClient) {
+  constructor(private client: StudentsClient, private router: Router) {
   }
 
   save(form: NgForm) {

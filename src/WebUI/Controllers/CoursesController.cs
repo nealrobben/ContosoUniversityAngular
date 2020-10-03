@@ -1,6 +1,7 @@
 ﻿using ContosoUniversityAngular.Application.Courses.Commands.CreateCourse;
 using ContosoUniversityAngular.Application.Courses.Commands.DeleteCourse;
 using ContosoUniversityAngular.Application.Courses.Queries.GetCourseDetails;
+using ContosoUniversityAngular.Application.Courses.Queries.GetCoursesForInstructor;
 using ContosoUniversityAngular.Application.Courses.Queries.GetCoursesOverview;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,14 @@ namespace ContosoUniversityAngular.WebUI.Controllers
         public async Task<ActionResult<CourseDetailVM>> Get(string id)
         {
             var vm = await Mediator.Send(new GetCourseDetailsQuery(int.Parse(id)));
+
+            return Ok(vm);
+        }
+
+        [HttpGet("byinstructor/{id}")]
+        public async Task<ActionResult<CoursesForInstructorOverviewVM>> GetLookup(string id)
+        {
+            var vm = await Mediator.Send(new GetCoursesForInstructorQuery(int.Parse(id)));
 
             return Ok(vm);
         }

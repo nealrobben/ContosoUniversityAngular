@@ -1,0 +1,20 @@
+﻿using AutoMapper;
+using ContosoUniversityAngular.Application.Common.Mappings;
+
+namespace ContosoUniversityAngular.Application.Courses.Queries.GetCoursesForInstructor
+{
+    public class CourseForInstructorVM : IMapFrom<Domain.Entities.Course>
+    {
+        public int CourseID { get; set; }
+
+        public string Title { get; set; }
+
+        public string DepartmentName { get; set; }
+
+        public void Mapping(Profile profile)
+        {
+            profile.CreateMap<Domain.Entities.Course, CourseForInstructorVM>()
+                .ForMember(d => d.DepartmentName, opt => opt.MapFrom(s => s.Department.Name));
+        }
+    }
+}

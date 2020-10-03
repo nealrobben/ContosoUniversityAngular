@@ -85,6 +85,7 @@ export interface ICoursesClient {
     create(command: CreateCourseCommand): Observable<void>;
     get(id: string | null): Observable<CourseDetailVM>;
     delete(id: string | null): Observable<void>;
+    getLookup(id: string | null): Observable<CoursesForInstructorOverviewVM>;
 }
 
 @Injectable({
@@ -308,6 +309,57 @@ export class CoursesClient implements ICoursesClient {
             }));
         }
         return _observableOf<void>(<any>null);
+    }
+
+    getLookup(id: string | null): Observable<CoursesForInstructorOverviewVM> {
+        let url_ = this.baseUrl + "/api/Courses/byinstructor/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetLookup(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetLookup(<any>response_);
+                } catch (e) {
+                    return <Observable<CoursesForInstructorOverviewVM>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CoursesForInstructorOverviewVM>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetLookup(response: HttpResponseBase): Observable<CoursesForInstructorOverviewVM> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CoursesForInstructorOverviewVM.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CoursesForInstructorOverviewVM>(<any>null);
     }
 }
 
@@ -1856,6 +1908,94 @@ export interface IProblemDetails {
     detail?: string | undefined;
     instance?: string | undefined;
     extensions?: { [key: string]: any; } | undefined;
+}
+
+export class CoursesForInstructorOverviewVM implements ICoursesForInstructorOverviewVM {
+    courses?: CourseForInstructorVM[] | undefined;
+
+    constructor(data?: ICoursesForInstructorOverviewVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["courses"])) {
+                this.courses = [] as any;
+                for (let item of _data["courses"])
+                    this.courses!.push(CourseForInstructorVM.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): CoursesForInstructorOverviewVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new CoursesForInstructorOverviewVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.courses)) {
+            data["courses"] = [];
+            for (let item of this.courses)
+                data["courses"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface ICoursesForInstructorOverviewVM {
+    courses?: CourseForInstructorVM[] | undefined;
+}
+
+export class CourseForInstructorVM implements ICourseForInstructorVM {
+    courseID?: number;
+    title?: string | undefined;
+    departmentName?: string | undefined;
+
+    constructor(data?: ICourseForInstructorVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.courseID = _data["courseID"];
+            this.title = _data["title"];
+            this.departmentName = _data["departmentName"];
+        }
+    }
+
+    static fromJS(data: any): CourseForInstructorVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new CourseForInstructorVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["courseID"] = this.courseID;
+        data["title"] = this.title;
+        data["departmentName"] = this.departmentName;
+        return data; 
+    }
+}
+
+export interface ICourseForInstructorVM {
+    courseID?: number;
+    title?: string | undefined;
+    departmentName?: string | undefined;
 }
 
 export class CreateCourseCommand implements ICreateCourseCommand {

@@ -154,6 +154,38 @@
         }
       }
     },
+    "/api/Courses/byinstructor/{id}": {
+      "get": {
+        "tags": [
+          "Courses"
+        ],
+        "operationId": "Courses_GetLookup",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoursesForInstructorOverviewVM"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Departments": {
       "get": {
         "tags": [
@@ -1021,6 +1053,37 @@
             "type": "object",
             "nullable": true,
             "additionalProperties": {}
+          }
+        }
+      },
+      "CoursesForInstructorOverviewVM": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "courses": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/CourseForInstructorVM"
+            }
+          }
+        }
+      },
+      "CourseForInstructorVM": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "courseID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "departmentName": {
+            "type": "string",
+            "nullable": true
           }
         }
       },

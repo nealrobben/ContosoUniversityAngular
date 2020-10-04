@@ -159,7 +159,7 @@
         "tags": [
           "Courses"
         ],
-        "operationId": "Courses_GetLookup",
+        "operationId": "Courses_ByInstructor",
         "parameters": [
           {
             "name": "id",

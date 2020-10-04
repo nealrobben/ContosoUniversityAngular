@@ -33,6 +33,7 @@
         COURSES
       </td>
       <td>
+        <a (click)="selectInstructor(instructor.instructorID)">Select</a> |
         <a [routerLink]="['/instructors/edit', instructor.instructorID]" routerLinkActive="active">Edit</a> |
         <a [routerLink]="['/instructors/details', instructor.instructorID]" routerLinkActive="active">Details</a> |
         <a (click)="deleteInstructor(instructor.instructorID, instructor.lastName + ', ' + instructor.firstName)">Delete</a>
@@ -41,4 +42,32 @@
   </tbody>
 </table>
 
-
+<div *ngIf="coursesOverviewVm?.courses?.length > 0">
+  <h3>Courses Taught by Selected Instructor</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Number</th>
+        <th>Title</th>
+        <th>Department</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let course of coursesOverviewVm?.courses">
+        <td>
+          SELECT
+        </td>
+        <td>
+          {{course.courseID}}
+        </td>
+        <td>
+          {{course.Title}}
+        </td>
+        <td>
+          {{course.departmentName}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

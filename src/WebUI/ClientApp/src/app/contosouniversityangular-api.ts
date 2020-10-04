@@ -85,7 +85,7 @@ export interface ICoursesClient {
     create(command: CreateCourseCommand): Observable<void>;
     get(id: string | null): Observable<CourseDetailVM>;
     delete(id: string | null): Observable<void>;
-    getLookup(id: string | null): Observable<CoursesForInstructorOverviewVM>;
+    byInstructor(id: string | null): Observable<CoursesForInstructorOverviewVM>;
 }
 
 @Injectable({
@@ -311,7 +311,7 @@ export class CoursesClient implements ICoursesClient {
         return _observableOf<void>(<any>null);
     }
 
-    getLookup(id: string | null): Observable<CoursesForInstructorOverviewVM> {
+    byInstructor(id: string | null): Observable<CoursesForInstructorOverviewVM> {
         let url_ = this.baseUrl + "/api/Courses/byinstructor/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -327,11 +327,11 @@ export class CoursesClient implements ICoursesClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetLookup(response_);
+            return this.processByInstructor(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetLookup(<any>response_);
+                    return this.processByInstructor(<any>response_);
                 } catch (e) {
                     return <Observable<CoursesForInstructorOverviewVM>><any>_observableThrow(e);
                 }
@@ -340,7 +340,7 @@ export class CoursesClient implements ICoursesClient {
         }));
     }
 
-    protected processGetLookup(response: HttpResponseBase): Observable<CoursesForInstructorOverviewVM> {
+    protected processByInstructor(response: HttpResponseBase): Observable<CoursesForInstructorOverviewVM> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 

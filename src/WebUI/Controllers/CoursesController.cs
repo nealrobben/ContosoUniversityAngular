@@ -30,7 +30,7 @@ namespace ContosoUniversityAngular.WebUI.Controllers
         }
 
         [HttpGet("byinstructor/{id}")]
-        public async Task<ActionResult<CoursesForInstructorOverviewVM>> GetLookup(string id)
+        public async Task<ActionResult<CoursesForInstructorOverviewVM>> ByInstructor(string id)
         {
             var vm = await Mediator.Send(new GetCoursesForInstructorQuery(int.Parse(id)));
 

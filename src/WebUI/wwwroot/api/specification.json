@@ -517,6 +517,38 @@
         }
       }
     },
+    "/api/Students/bycourse/{id}": {
+      "get": {
+        "tags": [
+          "Students"
+        ],
+        "operationId": "Students_ByCourse",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentsForCourseVM"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Students": {
       "post": {
         "tags": [
@@ -1328,6 +1360,55 @@
             "format": "date-time"
           }
         }
+      },
+      "StudentsForCourseVM": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "students": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/StudentForCourseVM"
+            }
+          }
+        }
+      },
+      "StudentForCourseVM": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "studentName": {
+            "type": "string",
+            "nullable": true
+          },
+          "studentGrade": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Grade"
+              }
+            ]
+          }
+        }
+      },
+      "Grade": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "F"
+        ],
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
       },
       "CreateStudentCommand": {
         "type": "object",

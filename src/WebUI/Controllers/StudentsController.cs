@@ -1,5 +1,6 @@
 ﻿using ContosoUniversityAngular.Application.Students.Commands.CreateStudent;
 using ContosoUniversityAngular.Application.Students.Commands.DeleteStudent;
+using ContosoUniversityAngular.Application.Students.Queries.GetStudentsForCourse;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -16,6 +17,14 @@ namespace ContosoUniversityAngular.WebUI.Controllers
             await Mediator.Send(new DeleteStudentCommand(int.Parse(id)));
 
             return NoContent();
+        }
+
+        [HttpGet("bycourse/{id}")]
+        public async Task<ActionResult<StudentsForCourseVM>> ByCourse(string id)
+        {
+            var vm = await Mediator.Send(new GetStudentsForCourseQuery(int.Parse(id)));
+
+            return Ok(vm);
         }
 
         [HttpPost]

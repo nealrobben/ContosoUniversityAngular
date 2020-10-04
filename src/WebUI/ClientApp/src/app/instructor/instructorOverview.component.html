@@ -56,7 +56,7 @@
     <tbody>
       <tr *ngFor="let course of coursesOverviewVm?.courses">
         <td>
-          SELECT
+          <a (click)="selectCourse(course.courseID)">Select</a>
         </td>
         <td>
           {{course.courseID}}
@@ -66,6 +66,30 @@
         </td>
         <td>
           {{course.departmentName}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="studentsOverviewVM?.students?.length > 0">
+  <h3>
+    Students Enrolled in Selected Course
+  </h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Grade</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let student of studentsOverviewVM?.students">
+        <td>
+          {{student.studentName}}
+        </td>
+        <td>
+          {{student.studentGrade}}
         </td>
       </tr>
     </tbody>

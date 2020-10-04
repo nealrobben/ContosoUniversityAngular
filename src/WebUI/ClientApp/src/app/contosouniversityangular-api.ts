@@ -925,6 +925,7 @@ export class InstructorsClient implements IInstructorsClient {
 
 export interface IStudentsClient {
     delete(id: string | null): Observable<void>;
+    byCourse(id: string | null): Observable<StudentsForCourseVM>;
     create(command: CreateStudentCommand): Observable<void>;
 }
 
@@ -993,6 +994,57 @@ export class StudentsClient implements IStudentsClient {
             }));
         }
         return _observableOf<void>(<any>null);
+    }
+
+    byCourse(id: string | null): Observable<StudentsForCourseVM> {
+        let url_ = this.baseUrl + "/api/Students/bycourse/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processByCourse(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processByCourse(<any>response_);
+                } catch (e) {
+                    return <Observable<StudentsForCourseVM>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<StudentsForCourseVM>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processByCourse(response: HttpResponseBase): Observable<StudentsForCourseVM> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = StudentsForCourseVM.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<StudentsForCourseVM>(<any>null);
     }
 
     create(command: CreateStudentCommand): Observable<void> {
@@ -2596,6 +2648,98 @@ export interface ICreateInstructorCommand {
     firstName?: string | undefined;
     lastName?: string | undefined;
     hireDate?: Date;
+}
+
+export class StudentsForCourseVM implements IStudentsForCourseVM {
+    students?: StudentForCourseVM[] | undefined;
+
+    constructor(data?: IStudentsForCourseVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["students"])) {
+                this.students = [] as any;
+                for (let item of _data["students"])
+                    this.students!.push(StudentForCourseVM.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): StudentsForCourseVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new StudentsForCourseVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.students)) {
+            data["students"] = [];
+            for (let item of this.students)
+                data["students"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IStudentsForCourseVM {
+    students?: StudentForCourseVM[] | undefined;
+}
+
+export class StudentForCourseVM implements IStudentForCourseVM {
+    studentName?: string | undefined;
+    studentGrade?: Grade | undefined;
+
+    constructor(data?: IStudentForCourseVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.studentName = _data["studentName"];
+            this.studentGrade = _data["studentGrade"];
+        }
+    }
+
+    static fromJS(data: any): StudentForCourseVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new StudentForCourseVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["studentName"] = this.studentName;
+        data["studentGrade"] = this.studentGrade;
+        return data; 
+    }
+}
+
+export interface IStudentForCourseVM {
+    studentName?: string | undefined;
+    studentGrade?: Grade | undefined;
+}
+
+export enum Grade {
+    A = 0,
+    B = 1,
+    C = 2,
+    D = 3,
+    F = 4,
 }
 
 export class CreateStudentCommand implements ICreateStudentCommand {

@@ -5,6 +5,8 @@ using ContosoUniversityAngular.Application.Courses.Queries.GetCoursesForInstruct
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,7 +28,13 @@ namespace ContosoUniversityAngular.Application.Courses.Queries.GetCoursesOvervie
             if (request.ID == null)
                 return new CoursesForInstructorOverviewVM(new List<CourseForInstructorVM>());
 
+            var courseIdsForInstructor = await _context.CourseAssignments
+                .Where(x => x.InstructorID == request.ID)
+                .Select(x => x.CourseID)
+                .ToListAsync(cancellationToken);
+
             var courses = await _context.Courses
+                .Where(x => courseIdsForInstructor.Contains(x.CourseID))
                 .Include(c => c.Department)
                 .AsNoTracking()
                 .ProjectTo<CourseForInstructorVM>(_mapper.ConfigurationProvider)

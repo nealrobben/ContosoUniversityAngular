@@ -16,7 +16,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let instructor of vm.instructors">
+    <tr *ngFor="let instructor of vm.instructors" [class.bg-success]="instructor.instructorID === selectedInstructorID">
       <td>
         {{instructor.lastName}}
       </td>
@@ -54,7 +54,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let course of coursesOverviewVm?.courses">
+      <tr *ngFor="let course of coursesOverviewVm?.courses" [class.bg-success]="course.courseID === selectedCourseID">
         <td>
           <a (click)="selectCourse(course.courseID)">Select</a>
         </td>

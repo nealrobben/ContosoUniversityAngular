@@ -10,6 +10,8 @@ export class InstructorOverviewComponent {
   public vm: InstructorsOverviewVM = new InstructorsOverviewVM();
   public coursesOverviewVm: CoursesForInstructorOverviewVM = new CoursesForInstructorOverviewVM();
   public studentsOverviewVM: StudentsForCourseVM = new StudentsForCourseVM();
+  public selectedInstructorID: string;
+  public selectedCourseID: string;
 
   title = 'Instructors';
 
@@ -18,15 +20,22 @@ export class InstructorOverviewComponent {
   }
 
   public selectInstructor(id: string) {
+
+    this.selectedInstructorID = id;
+    this.selectedCourseID = "";
     this.coursesOverviewVm = new CoursesForInstructorOverviewVM();
     this.studentsOverviewVM = new StudentsForCourseVM();
+
     this.coursesClient.byInstructor(id).subscribe(result => {
       this.coursesOverviewVm = result;
     }, error => console.error(error));
   }
 
   public selectCourse(id: string) {
+
     this.studentsOverviewVM = new StudentsForCourseVM();
+    this.selectedCourseID = id;
+
     this.studentsClient.byCourse(id).subscribe(result => {
       this.studentsOverviewVM = result;
     }, error => console.error(error));

@@ -9,9 +9,11 @@ import { InstructorEditComponent } from "./instructorEdit.component";
 import { InstructorCreateComponent } from "./instructorCreate.component";
 import { InstructorComponent } from "./instructor.component";
 
+import { SharedModule } from "../shared/shared.module";
+
 @NgModule({
   imports: [
-    CommonModule, RouterModule, FormsModule
+    CommonModule, RouterModule, FormsModule, SharedModule
   ],
   declarations: [
     InstructorOverviewComponent, InstructorComponent, InstructorDetailsComponent, InstructorEditComponent, InstructorCreateComponent

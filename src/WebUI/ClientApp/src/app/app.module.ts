@@ -11,6 +11,7 @@ import { DepartmentModule } from "./department/department.module";
 import { InstructorModule } from "./instructor/instructor.module";
 import { StudentModule } from "./student/student.module";
 import { AboutModule } from "./about/about.module";
+import { SharedModule } from "./shared/shared.module";
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -108,11 +109,13 @@ import { InstructorEditComponent } from './instructor/instructorEdit.component';
     DepartmentModule,
     InstructorModule,
     StudentModule,
-    AboutModule
+    AboutModule,
+    SharedModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: []
 })
 export class AppModule { }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { InstructorsClient, InstructorsOverviewVM, CoursesClient, CoursesForInstructorOverviewVM, StudentsClient, StudentsForCourseVM } from '../contosouniversityangular-api';
+import { InstructorsClient, InstructorsOverviewVM, CoursesClient, CoursesForInstructorOverviewVM, StudentsClient, StudentsForCourseVM, Grade } from '../contosouniversityangular-api';
 
 @Component({
   selector: 'instructor-overview',
@@ -18,6 +18,8 @@ export class InstructorOverviewComponent {
   constructor(private client: InstructorsClient, private coursesClient: CoursesClient, private studentsClient: StudentsClient) {
     this.getInstructors();
   }
+
+  get Grade() { return Grade; }
 
   public selectInstructor(id: string) {
 

@@ -13,5 +13,10 @@ namespace ContosoUniversityAngular.Application.Instructors.Queries.GetInstructor
         {
             profile.CreateMap<Instructor, InstructorLookupVM>();
         }
+
+        public override string ToString()
+        {
+            return $"{ID} - {FullName}";
+        }
     }
 }

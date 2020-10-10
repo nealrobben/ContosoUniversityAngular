@@ -27,5 +27,10 @@ namespace ContosoUniversityAngular.Application.Instructors.Queries.GetInstructor
                 .ForMember(d => d.FirstName, opt => opt.MapFrom(s => s.FirstMidName))
                 .ForMember(d => d.OfficeLocation, opt => opt.MapFrom(s => s.OfficeAssignment.Location));
         }
+
+        public override string ToString()
+        {
+            return $"{InstructorID} - {LastName} - {FirstName}";
+        }
     }
 }

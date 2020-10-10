@@ -22,5 +22,10 @@ namespace ContosoUniversityAngular.Application.Departments.Queries.GetDepartment
             profile.CreateMap<Department, DepartmentVM>()
                 .ForMember(d => d.AdministratorName, opt => opt.MapFrom(s => s.Administrator != null ? s.Administrator.FullName : string.Empty));
         }
+
+        public override string ToString()
+        {
+            return $"{DepartmentID} - {Name}";
+        }
     }
 }

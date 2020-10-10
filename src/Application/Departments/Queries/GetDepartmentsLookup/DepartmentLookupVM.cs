@@ -14,5 +14,10 @@ namespace ContosoUniversityAngular.Application.Departments.Queries.GetDepartment
         {
             profile.CreateMap<Department, DepartmentLookupVM>();
         }
+
+        public override string ToString()
+        {
+            return $"{DepartmentID} - {Name}";
+        }
     }
 }

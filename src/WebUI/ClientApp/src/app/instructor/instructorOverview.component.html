@@ -30,7 +30,9 @@
         {{instructor.officeLocation}}
       </td>
       <td>
-        COURSES
+        <span *ngFor="let courseAssignment of instructor.courseAssignments">
+          {{courseAssignment.courseID}}: {{courseAssignment.courseTitle}} <br />
+        </span>
       </td>
       <td>
         <a (click)="selectInstructor(instructor.instructorID)">Select</a> |

@@ -18,7 +18,7 @@ namespace ContosoUniversityAngular.Application.Instructors.Queries.GetInstructor
 
         public string OfficeLocation { get; set; }
 
-        //public List<CourseAssignmentVM> CourseAssignments { get; set; }
+        public List<CourseAssignmentVM> CourseAssignments { get; set; }
 
         public void Mapping(Profile profile)
         {

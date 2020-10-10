@@ -2428,6 +2428,7 @@ export class InstructorVM implements IInstructorVM {
     firstName?: string | undefined;
     hireDate?: Date;
     officeLocation?: string | undefined;
+    courseAssignments?: CourseAssignmentVM[] | undefined;
 
     constructor(data?: IInstructorVM) {
         if (data) {
@@ -2445,6 +2446,11 @@ export class InstructorVM implements IInstructorVM {
             this.firstName = _data["firstName"];
             this.hireDate = _data["hireDate"] ? new Date(_data["hireDate"].toString()) : <any>undefined;
             this.officeLocation = _data["officeLocation"];
+            if (Array.isArray(_data["courseAssignments"])) {
+                this.courseAssignments = [] as any;
+                for (let item of _data["courseAssignments"])
+                    this.courseAssignments!.push(CourseAssignmentVM.fromJS(item));
+            }
         }
     }
 
@@ -2462,6 +2468,11 @@ export class InstructorVM implements IInstructorVM {
         data["firstName"] = this.firstName;
         data["hireDate"] = this.hireDate ? this.hireDate.toISOString() : <any>undefined;
         data["officeLocation"] = this.officeLocation;
+        if (Array.isArray(this.courseAssignments)) {
+            data["courseAssignments"] = [];
+            for (let item of this.courseAssignments)
+                data["courseAssignments"].push(item.toJSON());
+        }
         return data; 
     }
 }
@@ -2472,6 +2483,47 @@ export interface IInstructorVM {
     firstName?: string | undefined;
     hireDate?: Date;
     officeLocation?: string | undefined;
+    courseAssignments?: CourseAssignmentVM[] | undefined;
+}
+
+export class CourseAssignmentVM implements ICourseAssignmentVM {
+    courseID?: number;
+    courseTitle?: string | undefined;
+
+    constructor(data?: ICourseAssignmentVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.courseID = _data["courseID"];
+            this.courseTitle = _data["courseTitle"];
+        }
+    }
+
+    static fromJS(data: any): CourseAssignmentVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new CourseAssignmentVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["courseID"] = this.courseID;
+        data["courseTitle"] = this.courseTitle;
+        return data; 
+    }
+}
+
+export interface ICourseAssignmentVM {
+    courseID?: number;
+    courseTitle?: string | undefined;
 }
 
 export class InstructorDetailsVM implements IInstructorDetailsVM {

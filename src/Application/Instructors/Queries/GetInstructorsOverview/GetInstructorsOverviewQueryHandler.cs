@@ -25,22 +25,7 @@ namespace ContosoUniversityAngular.Application.Instructors.Queries.GetInstructor
 
         public async Task<InstructorsOverviewVM> Handle(GetInstructorsOverviewQuery request, CancellationToken cancellationToken)
         {
-            //return new InstructorsOverviewVM(new List<InstructorVM>());
-
-            List<InstructorVM> instructorVMs = await GetInstructors(cancellationToken);
-            //List<CourseVM> courseVMs = await GetCourses(request, cancellationToken);
-            //List<EnrollmentVM> enrollments = await GetEnrollments(request, cancellationToken);
-
-            //return new InstructorsOverviewVM
-            //{
-            //    SelectedInstructorID = request.SelectedInstructorID,
-            //    SelectedCourseID = request.SelectedCourseID,
-            //    Instructors = instructorVMs,
-            //    Courses = courseVMs,
-            //    Enrollments = enrollments
-            //};
-
-            return new InstructorsOverviewVM(instructorVMs);
+            return new InstructorsOverviewVM(await GetInstructors(cancellationToken));
         }
 
         private async Task<List<InstructorVM>> GetInstructors(CancellationToken cancellationToken)
@@ -59,34 +44,5 @@ namespace ContosoUniversityAngular.Application.Instructors.Queries.GetInstructor
                   .ProjectTo<InstructorVM>(_mapper.ConfigurationProvider)
                   .ToListAsync(cancellationToken);
         }
-
-        //private async Task<List<CourseVM>> GetCourses(GetInstructorsOverviewQuery request, CancellationToken cancellationToken)
-        //{
-        //    if (request.SelectedInstructorID != null)
-        //    {
-        //        return await _context.CourseAssignments
-        //            .Where(x => x.InstructorID == request.SelectedInstructorID.Value)
-        //            .AsNoTracking()
-        //            .ProjectTo<CourseVM>(_mapper.ConfigurationProvider)
-        //            .ToListAsync(cancellationToken);
-        //    }
-
-        //    return null;
-        //}
-
-        //private async Task<List<EnrollmentVM>> GetEnrollments(GetInstructorsOverviewQuery request, CancellationToken cancellationToken)
-        //{
-        //    if (request.SelectedCourseID != null)
-        //    {
-        //        return await _context.Enrollments
-        //            .AsNoTracking()
-        //            .Include(x => x.Student)
-        //            .Where(x => x.CourseID == request.SelectedCourseID.Value)
-        //            .ProjectTo<EnrollmentVM>(_mapper.ConfigurationProvider)
-        //            .ToListAsync(cancellationToken);
-        //    }
-
-        //    return null;
-        //}
     }
 }

@@ -1291,6 +1291,27 @@
           "officeLocation": {
             "type": "string",
             "nullable": true
+          },
+          "courseAssignments": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/CourseAssignmentVM"
+            }
+          }
+        }
+      },
+      "CourseAssignmentVM": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "courseID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "courseTitle": {
+            "type": "string",
+            "nullable": true
           }
         }
       },

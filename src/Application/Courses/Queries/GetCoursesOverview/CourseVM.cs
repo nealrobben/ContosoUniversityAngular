@@ -24,5 +24,10 @@ namespace ContosoUniversityAngular.Application.Courses.Queries.GetCoursesOvervie
             profile.CreateMap<Course, CourseVM>()
                 .ForMember(d => d.DepartmentName, opt => opt.MapFrom(s => s.Department.Name));
         }
+
+        public override string ToString()
+        {
+            return $"{CourseID} - {Title} - {DepartmentName}";
+        }
     }
 }

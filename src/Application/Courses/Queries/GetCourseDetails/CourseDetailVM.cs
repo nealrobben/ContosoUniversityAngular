@@ -18,5 +18,10 @@ namespace ContosoUniversityAngular.Application.Courses.Queries.GetCourseDetails
         {
             profile.CreateMap<Course, CourseDetailVM>();
         }
+
+        public override string ToString()
+        {
+            return $"{CourseID} - {Title}";
+        }
     }
 }

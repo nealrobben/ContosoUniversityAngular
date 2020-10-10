@@ -16,5 +16,10 @@ namespace ContosoUniversityAngular.Application.Courses.Queries.GetCoursesForInst
             profile.CreateMap<Domain.Entities.Course, CourseForInstructorVM>()
                 .ForMember(d => d.DepartmentName, opt => opt.MapFrom(s => s.Department.Name));
         }
+
+        public override string ToString()
+        {
+            return $"{CourseID} - {Title} - {DepartmentName}";
+        }
     }
 }

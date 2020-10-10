@@ -16,5 +16,10 @@ namespace ContosoUniversityAngular.Application.Students.Queries.GetStudentsForCo
                 .ForMember(d => d.StudentName, opt => opt.MapFrom(s => s.Student.FullName))
                 .ForMember(d => d.StudentGrade, opt => opt.MapFrom(s => s.Grade));
         }
+
+        public override string ToString()
+        {
+            return $"{StudentName} - {StudentGrade}";
+        }
     }
 }

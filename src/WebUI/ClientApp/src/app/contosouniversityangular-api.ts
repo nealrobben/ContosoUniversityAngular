@@ -924,9 +924,10 @@ export class InstructorsClient implements IInstructorsClient {
 }
 
 export interface IStudentsClient {
+    getAll(sortOrder: string | null | undefined, currentFilter: string | null | undefined, searchString: string | null | undefined, pageNumber: number | null | undefined): Observable<StudentsOverviewVM>;
+    create(command: CreateStudentCommand): Observable<void>;
     delete(id: string | null): Observable<void>;
     byCourse(id: string | null): Observable<StudentsForCourseVM>;
-    create(command: CreateStudentCommand): Observable<void>;
 }
 
 @Injectable({
@@ -940,6 +941,112 @@ export class StudentsClient implements IStudentsClient {
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
         this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    getAll(sortOrder: string | null | undefined, currentFilter: string | null | undefined, searchString: string | null | undefined, pageNumber: number | null | undefined): Observable<StudentsOverviewVM> {
+        let url_ = this.baseUrl + "/api/Students?";
+        if (sortOrder !== undefined)
+            url_ += "sortOrder=" + encodeURIComponent("" + sortOrder) + "&"; 
+        if (currentFilter !== undefined)
+            url_ += "currentFilter=" + encodeURIComponent("" + currentFilter) + "&"; 
+        if (searchString !== undefined)
+            url_ += "searchString=" + encodeURIComponent("" + searchString) + "&"; 
+        if (pageNumber !== undefined)
+            url_ += "pageNumber=" + encodeURIComponent("" + pageNumber) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(<any>response_);
+                } catch (e) {
+                    return <Observable<StudentsOverviewVM>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<StudentsOverviewVM>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<StudentsOverviewVM> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = StudentsOverviewVM.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<StudentsOverviewVM>(<any>null);
+    }
+
+    create(command: CreateStudentCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/Students";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let resultdefault: any = null;
+            let resultDatadefault = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            resultdefault = ProblemDetails.fromJS(resultDatadefault);
+            return throwException("A server side error occurred.", status, _responseText, _headers, resultdefault);
+            }));
+        }
     }
 
     delete(id: string | null): Observable<void> {
@@ -1045,56 +1152,6 @@ export class StudentsClient implements IStudentsClient {
             }));
         }
         return _observableOf<StudentsForCourseVM>(<any>null);
-    }
-
-    create(command: CreateStudentCommand): Observable<void> {
-        let url_ = this.baseUrl + "/api/Students";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(command);
-
-        let options_ : any = {
-            body: content_,
-            observe: "response",
-            responseType: "blob",			
-            headers: new HttpHeaders({
-                "Content-Type": "application/json", 
-            })
-        };
-
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processCreate(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processCreate(<any>response_);
-                } catch (e) {
-                    return <Observable<void>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<void>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processCreate(response: HttpResponseBase): Observable<void> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(<any>null);
-            }));
-        } else {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let resultdefault: any = null;
-            let resultDatadefault = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            resultdefault = ProblemDetails.fromJS(resultDatadefault);
-            return throwException("A server side error occurred.", status, _responseText, _headers, resultdefault);
-            }));
-        }
     }
 }
 
@@ -2700,6 +2757,130 @@ export interface ICreateInstructorCommand {
     firstName?: string | undefined;
     lastName?: string | undefined;
     hireDate?: Date;
+}
+
+export class StudentsOverviewVM implements IStudentsOverviewVM {
+    students?: StudentOverviewVM[] | undefined;
+    currentSort?: string | undefined;
+    nameSortParm?: string | undefined;
+    dateSortParm?: string | undefined;
+    currentFilter?: string | undefined;
+    pageNumber?: number;
+    totalPages?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+
+    constructor(data?: IStudentsOverviewVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["students"])) {
+                this.students = [] as any;
+                for (let item of _data["students"])
+                    this.students!.push(StudentOverviewVM.fromJS(item));
+            }
+            this.currentSort = _data["currentSort"];
+            this.nameSortParm = _data["nameSortParm"];
+            this.dateSortParm = _data["dateSortParm"];
+            this.currentFilter = _data["currentFilter"];
+            this.pageNumber = _data["pageNumber"];
+            this.totalPages = _data["totalPages"];
+            this.hasPreviousPage = _data["hasPreviousPage"];
+            this.hasNextPage = _data["hasNextPage"];
+        }
+    }
+
+    static fromJS(data: any): StudentsOverviewVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new StudentsOverviewVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.students)) {
+            data["students"] = [];
+            for (let item of this.students)
+                data["students"].push(item.toJSON());
+        }
+        data["currentSort"] = this.currentSort;
+        data["nameSortParm"] = this.nameSortParm;
+        data["dateSortParm"] = this.dateSortParm;
+        data["currentFilter"] = this.currentFilter;
+        data["pageNumber"] = this.pageNumber;
+        data["totalPages"] = this.totalPages;
+        data["hasPreviousPage"] = this.hasPreviousPage;
+        data["hasNextPage"] = this.hasNextPage;
+        return data; 
+    }
+}
+
+export interface IStudentsOverviewVM {
+    students?: StudentOverviewVM[] | undefined;
+    currentSort?: string | undefined;
+    nameSortParm?: string | undefined;
+    dateSortParm?: string | undefined;
+    currentFilter?: string | undefined;
+    pageNumber?: number;
+    totalPages?: number;
+    hasPreviousPage?: boolean;
+    hasNextPage?: boolean;
+}
+
+export class StudentOverviewVM implements IStudentOverviewVM {
+    studentID?: number;
+    firstName?: string | undefined;
+    lastName?: string | undefined;
+    enrollmentDate?: Date;
+
+    constructor(data?: IStudentOverviewVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.studentID = _data["studentID"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.enrollmentDate = _data["enrollmentDate"] ? new Date(_data["enrollmentDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): StudentOverviewVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new StudentOverviewVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["studentID"] = this.studentID;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["enrollmentDate"] = this.enrollmentDate ? formatDate(this.enrollmentDate) : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IStudentOverviewVM {
+    studentID?: number;
+    firstName?: string | undefined;
+    lastName?: string | undefined;
+    enrollmentDate?: Date;
 }
 
 export class StudentsForCourseVM implements IStudentsForCourseVM {

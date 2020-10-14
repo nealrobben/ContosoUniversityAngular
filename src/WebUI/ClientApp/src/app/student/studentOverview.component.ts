@@ -10,6 +10,8 @@ export class StudentOverviewComponent {
   public vm: StudentsOverviewVM = new StudentsOverviewVM();
   title = 'Students';
 
+  public currentFilter: string = "";
+
   constructor(private client: StudentsClient) {
     this.getStudents();
   }
@@ -24,9 +26,33 @@ export class StudentOverviewComponent {
 
   private getStudents() {
     console.log("getStudents");
-    //this.client.getAll().subscribe(result => {
-    //  this.vm = result;
-    //}, error => console.error(error));
+    this.client.getAll("","","",1).subscribe(result => {
+      this.vm = result;
+    }, error => console.error(error));
+  }
+
+  public backToFullList() {
+    //TODO: implement
+  }
+
+  public filter() {
+    //TODO: implement
+  }
+
+  public sortByLastName() {
+
+  }
+
+  public sortByEnrollmentDate() {
+
+  }
+
+  public previousPage() {
+
+  }
+
+  public nextPage() {
+
   }
 
 }

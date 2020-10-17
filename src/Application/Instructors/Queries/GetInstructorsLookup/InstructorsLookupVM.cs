@@ -1,5 +1,4 @@
-﻿using ContosoUniversityCQRS.Application.Instructors.Queries.GetInstructorsLookup;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace ContosoUniversityAngular.Application.Instructors.Queries.GetInstructorsLookup
 {

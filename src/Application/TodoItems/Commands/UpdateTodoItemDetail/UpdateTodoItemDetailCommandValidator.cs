@@ -2,6 +2,5 @@
 {
     public class UpdateTodoItemDetailCommandValidator
     {
-        // TODO: Complete Validator
     }
 }

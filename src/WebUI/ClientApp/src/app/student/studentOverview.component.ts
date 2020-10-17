@@ -40,7 +40,7 @@ export class StudentOverviewComponent {
   }
 
   public sortByLastName() {
-
+	//TODO: implement
   }
 
   public sortByEnrollmentDate() {

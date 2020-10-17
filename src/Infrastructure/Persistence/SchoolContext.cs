@@ -26,19 +26,9 @@ namespace ContosoUniversityAngular.Persistence
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(SchoolContext).Assembly);
         }
 
-        public override int SaveChanges()
-        {
-            return base.SaveChanges();
-        }
-
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             return base.SaveChangesAsync(cancellationToken);
-        }
-
-        public override EntityEntry Entry(object entity)
-        {
-            return base.Entry(entity);
         }
 
         public override EntityEntry<TEntity> Entry<TEntity>(TEntity entity)

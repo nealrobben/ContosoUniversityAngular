@@ -1,7 +1,6 @@
 ﻿using ContosoUniversityAngular.Domain.Entities;
 using ContosoUniversityAngular.Domain.Enums;
 using ContosoUniversityAngular.Persistence;
-using IdentityServer4.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

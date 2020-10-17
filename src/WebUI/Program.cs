@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ContosoUniversityAngular.WebUI
 {
-    public class Program
+    public static class Program
     {
         public async static Task Main(string[] args)
         {

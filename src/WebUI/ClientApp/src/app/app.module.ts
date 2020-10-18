@@ -70,9 +70,9 @@ import { InstructorEditComponent } from './instructor/instructorEdit.component';
       {
         path: 'students', component: StudentComponent,
         children: [
-          { path: "details", component: StudentDetailsComponent },
+          { path: "details/:id", component: StudentDetailsComponent },
           { path: "create", component: StudentCreateComponent },
-          { path: "edit", component: StudentEditComponent },
+          { path: "edit/:id", component: StudentEditComponent },
           { path: "**", component: StudentOverviewComponent }
         ]
       },

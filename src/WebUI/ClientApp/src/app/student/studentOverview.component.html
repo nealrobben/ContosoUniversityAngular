@@ -42,8 +42,8 @@
         {{student.enrollmentDate | date:'yyyy-MM-dd'}}
       </td>
       <td>
-        <a routerLink="/students/edit" routerLinkActive="active">Edit</a> |
-        <a routerLink="/students/details" routerLinkActive="active">Details</a> |
+        <a [routerLink]="['/students/edit', student.studentID]" routerLinkActive="active">Edit</a> |
+        <a [routerLink]="['/students/details', student.studentID]" routerLinkActive="active">Details</a> |
         <a (click)="deleteStudent(student.studentID, student.firstName + ' ' + student.lastName)">Delete</a>
       </td>
     </tr>

@@ -1069,21 +1069,16 @@
         "additionalProperties": false,
         "properties": {
           "courseID": {
-            "title": "Number",
             "type": "integer",
             "format": "int32"
           },
           "title": {
             "type": "string",
-            "maxLength": 50,
-            "minLength": 3,
             "nullable": true
           },
           "credits": {
             "type": "integer",
-            "format": "int32",
-            "maximum": 5.0,
-            "minimum": 0.0
+            "format": "int32"
           },
           "departmentName": {
             "type": "string",

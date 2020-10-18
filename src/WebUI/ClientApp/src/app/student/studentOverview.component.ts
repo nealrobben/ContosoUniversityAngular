@@ -26,7 +26,10 @@ export class StudentOverviewComponent {
 
   private getStudents() {
     console.log("getStudents");
-    this.client.getAll("","","",1).subscribe(result => {
+
+    var pageNumber = this.vm.pageNumber ?? 1;
+
+    this.client.getAll("", "", "", pageNumber).subscribe(result => {
       this.vm = result;
     }, error => console.error(error));
   }
@@ -48,11 +51,15 @@ export class StudentOverviewComponent {
   }
 
   public previousPage() {
-
+    if (this.vm.pageNumber > 1)
+      this.vm.pageNumber -= 1;
+    this.getStudents();
   }
 
   public nextPage() {
-
+    if (this.vm.pageNumber < this.vm.totalPages)
+      this.vm.pageNumber += 1;
+    this.getStudents();
   }
 
 }

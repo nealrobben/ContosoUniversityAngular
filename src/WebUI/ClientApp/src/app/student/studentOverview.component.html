@@ -50,9 +50,9 @@
   </tbody>
 </table>
 
-<a (click)="previousPage()" class="btn btn-default">
+<a (click)="previousPage()" class="btn btn-default" *ngIf="vm?.hasPreviousPage">
   Previous
 </a>
-<a (click)="nextPage()" class="btn btn-default">
+<a (click)="nextPage()" class="btn btn-default" *ngIf="vm?.hasNextPage">
   Next
 </a>

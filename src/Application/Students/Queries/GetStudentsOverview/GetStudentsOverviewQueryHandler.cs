@@ -64,7 +64,8 @@ namespace ContosoUniversityAngular.Application.Students.Queries.GetStudentsOverv
                     break;
             }
 
-            result.TotalPages = await students.CountAsync();
+            var numberOfPages = (await students.CountAsync() / (double)_pageSize);
+            result.TotalPages = (int)Math.Ceiling(numberOfPages);
             result.PageNumber = request.PageNumber ?? 1;
 
             var items = await students.AsNoTracking().Skip((result.PageNumber - 1) * _pageSize)

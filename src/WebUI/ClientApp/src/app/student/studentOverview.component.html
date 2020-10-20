@@ -8,8 +8,8 @@
 <div class="form-actions no-color">
   <p>
     Find by name: <input type="text" name="SearchString" value="{{vm.currentFilter}}" />
-    <input (click)="filter()" value="Search" class="btn btn-default" /> |
-    <a (click)="backToFullList()">Back to Full List</a>
+    <button type="button" (click)="filter()" class="btn btn-link">Search</button>|
+    <button type="button" (click)="backToFullList()" class="btn btn-link">Back to Full List</button>
   </p>
 </div>
 
@@ -50,9 +50,9 @@
   </tbody>
 </table>
 
-<a (click)="previousPage()" class="btn btn-default" *ngIf="vm?.hasPreviousPage">
+<button type="button" (click)="previousPage()" class="btn btn-link" *ngIf="vm?.hasPreviousPage">
   Previous
-</a>
-<a (click)="nextPage()" class="btn btn-default" *ngIf="vm?.hasNextPage">
+</button>
+<button type="button" (click)="nextPage()" class="btn btn-link" *ngIf="vm?.hasNextPage">
   Next
-</a>
+</button>

@@ -28,6 +28,7 @@ export class StudentOverviewComponent {
     console.log("getStudents");
 
     var pageNumber = this.vm.pageNumber ?? 1;
+    var searchString = this.vm.currentFilter;
 
     this.client.getAll("", "", "", pageNumber).subscribe(result => {
       this.vm = result;
@@ -35,11 +36,12 @@ export class StudentOverviewComponent {
   }
 
   public backToFullList() {
-    //TODO: implement
+    this.vm.currentFilter = "";
+    this.getStudents();
   }
 
   public filter() {
-    //TODO: implement
+    //this.getStudents();
   }
 
   public sortByLastName() {

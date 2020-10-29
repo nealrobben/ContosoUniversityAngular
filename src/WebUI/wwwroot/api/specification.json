@@ -575,6 +575,46 @@
       }
     },
     "/api/Students/{id}": {
+      "get": {
+        "tags": [
+          "Students"
+        ],
+        "operationId": "Students_Get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentDetailsVM"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
       "delete": {
         "tags": [
           "Students"
@@ -1499,6 +1539,71 @@
           }
         }
       },
+      "StudentDetailsVM": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "studentID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "enrollmentDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "enrollments": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/StudentDetailsEnrollmentVM"
+            }
+          }
+        }
+      },
+      "StudentDetailsEnrollmentVM": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "courseTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "grade": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Grade"
+              }
+            ]
+          }
+        }
+      },
+      "Grade": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "F"
+        ],
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
+      },
       "StudentsForCourseVM": {
         "type": "object",
         "additionalProperties": false,
@@ -1529,24 +1634,6 @@
             ]
           }
         }
-      },
-      "Grade": {
-        "type": "integer",
-        "description": "",
-        "x-enumNames": [
-          "A",
-          "B",
-          "C",
-          "D",
-          "F"
-        ],
-        "enum": [
-          0,
-          1,
-          2,
-          3,
-          4
-        ]
       },
       "CreateStudentCommand": {
         "type": "object",

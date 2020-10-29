@@ -1,5 +1,6 @@
 ﻿using ContosoUniversityAngular.Application.Students.Commands.CreateStudent;
 using ContosoUniversityAngular.Application.Students.Commands.DeleteStudent;
+using ContosoUniversityAngular.Application.Students.Queries.GetStudentDetails;
 using ContosoUniversityAngular.Application.Students.Queries.GetStudentsForCourse;
 using ContosoUniversityAngular.Application.Students.Queries.GetStudentsOverview;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +15,16 @@ namespace ContosoUniversityAngular.WebUI.Controllers
         public async Task<ActionResult<StudentsOverviewVM>> GetAll(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
             var vm = await Mediator.Send(new GetStudentsOverviewQuery(sortOrder, currentFilter, searchString, pageNumber));
+
+            return Ok(vm);
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<StudentDetailsVM>> Get(string id)
+        {
+            var vm = await Mediator.Send(new GetStudentDetailsQuery(int.Parse(id)));
 
             return Ok(vm);
         }

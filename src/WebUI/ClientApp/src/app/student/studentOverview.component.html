@@ -7,9 +7,10 @@
 
 <div class="form-actions no-color">
   <p>
-    Find by name: <input type="text" name="SearchString" value="{{vm.currentFilter}}" />
-    <button type="button" (click)="filter()" class="btn btn-link">Search</button>|
-    <button type="button" (click)="backToFullList()" class="btn btn-link">Back to Full List</button>
+    <!--Find by name: <input type="text" name="SearchString" value="{{vm.currentFilter}}" />-->
+    Find by name: <input type="text" name="searchString" [(ngModel)]="vm.currentFilter" #searchString="ngModel" />
+    <button type="button" class="btn btn-link" (click)="filter()">Search</button>|
+    <button type="button" class="btn btn-link" (click)="backToFullList()">Back to Full List</button>
   </p>
 </div>
 

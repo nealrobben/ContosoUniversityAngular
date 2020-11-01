@@ -77,6 +77,39 @@
             }
           }
         }
+      },
+      "put": {
+        "tags": [
+          "Courses"
+        ],
+        "operationId": "Courses_Update",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCourseCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/Courses/{id}": {
@@ -1218,6 +1251,29 @@
           "courseID": {
             "type": "integer",
             "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "credits": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "departmentID": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "UpdateCourseCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "courseID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           },
           "title": {
             "type": "string",

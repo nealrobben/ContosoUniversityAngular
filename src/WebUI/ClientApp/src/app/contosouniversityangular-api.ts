@@ -83,6 +83,7 @@ export class AboutClient implements IAboutClient {
 export interface ICoursesClient {
     getAll(): Observable<CoursesOverviewVM>;
     create(command: CreateCourseCommand): Observable<void>;
+    update(command: UpdateCourseCommand): Observable<void>;
     get(id: string | null): Observable<CourseDetailVM>;
     delete(id: string | null): Observable<void>;
     byInstructor(id: string | null): Observable<CoursesForInstructorOverviewVM>;
@@ -179,6 +180,56 @@ export class CoursesClient implements ICoursesClient {
     }
 
     protected processCreate(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let resultdefault: any = null;
+            let resultDatadefault = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            resultdefault = ProblemDetails.fromJS(resultDatadefault);
+            return throwException("A server side error occurred.", status, _responseText, _headers, resultdefault);
+            }));
+        }
+    }
+
+    update(command: UpdateCourseCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/Courses";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -2209,6 +2260,54 @@ export class CreateCourseCommand implements ICreateCourseCommand {
 
 export interface ICreateCourseCommand {
     courseID?: number;
+    title?: string | undefined;
+    credits?: number;
+    departmentID?: number;
+}
+
+export class UpdateCourseCommand implements IUpdateCourseCommand {
+    courseID?: number | undefined;
+    title?: string | undefined;
+    credits?: number;
+    departmentID?: number;
+
+    constructor(data?: IUpdateCourseCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.courseID = _data["courseID"];
+            this.title = _data["title"];
+            this.credits = _data["credits"];
+            this.departmentID = _data["departmentID"];
+        }
+    }
+
+    static fromJS(data: any): UpdateCourseCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateCourseCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["courseID"] = this.courseID;
+        data["title"] = this.title;
+        data["credits"] = this.credits;
+        data["departmentID"] = this.departmentID;
+        return data; 
+    }
+}
+
+export interface IUpdateCourseCommand {
+    courseID?: number | undefined;
     title?: string | undefined;
     credits?: number;
     departmentID?: number;

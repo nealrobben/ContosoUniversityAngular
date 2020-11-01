@@ -1,5 +1,6 @@
 ﻿using ContosoUniversityAngular.Application.Courses.Commands.CreateCourse;
 using ContosoUniversityAngular.Application.Courses.Commands.DeleteCourse;
+using ContosoUniversityAngular.Application.Courses.Commands.UpdateCourse;
 using ContosoUniversityAngular.Application.Courses.Queries.GetCourseDetails;
 using ContosoUniversityAngular.Application.Courses.Queries.GetCoursesForInstructor;
 using ContosoUniversityAngular.Application.Courses.Queries.GetCoursesOverview;
@@ -51,6 +52,16 @@ namespace ContosoUniversityAngular.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
         public async Task<IActionResult> Create([FromBody] CreateCourseCommand command)
+        {
+            await Mediator.Send(command);
+
+            return NoContent();
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Update([FromBody] UpdateCourseCommand command)
         {
             await Mediator.Send(command);
 

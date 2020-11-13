@@ -11,11 +11,15 @@ import { InstructorsClient, CreateInstructorCommand } from '../contosouniversity
 export class InstructorCreateComponent {
 
   public instructor: CreateInstructorCommand = new CreateInstructorCommand();
+  public localHireDate = new Date();
 
   constructor(private client: InstructorsClient, private router: Router) {
   }
 
   save(form: NgForm) {
+
+    //Set date because datepicker returns a string
+    this.instructor.hireDate = new Date(this.localHireDate)
 
     if (form.valid) {
       this.client.create(this.instructor).subscribe(result => {

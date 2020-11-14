@@ -28,9 +28,9 @@ export class StudentOverviewComponent {
     console.log("getStudents");
 
     var pageNumber = this.vm.pageNumber ?? 1;
-    var searchString = this.vm.currentFilter;
+    var searchString = this.vm.currentFilter ?? "";
 
-    this.client.getAll("", "", "", pageNumber).subscribe(result => {
+    this.client.getAll("", "", searchString, pageNumber).subscribe(result => {
       this.vm = result;
     }, error => console.error(error));
   }
@@ -41,7 +41,7 @@ export class StudentOverviewComponent {
   }
 
   public filter() {
-    //this.getStudents();
+    this.getStudents();
   }
 
   public sortByLastName() {

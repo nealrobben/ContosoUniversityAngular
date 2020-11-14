@@ -12,9 +12,9 @@ export class DepartmentCreateComponent {
 
   public department: CreateDepartmentCommand = new CreateDepartmentCommand();
   public instructorsLookupVM: InstructorsLookupVM = new InstructorsLookupVM();
+  public localStartDate = new Date();
 
   constructor(private client: DepartmentsClient, private instructorsClient: InstructorsClient, private router: Router) {
-    //this.department.startDate = new Date();
 
     instructorsClient.getLookup().subscribe(result => {
       this.instructorsLookupVM = result;
@@ -23,6 +23,8 @@ export class DepartmentCreateComponent {
   }
 
   save(form: NgForm) {
+
+    this.department.startDate = new Date(this.localStartDate)
 
     if (form.valid) {
       this.client.create(this.department).subscribe(result => {

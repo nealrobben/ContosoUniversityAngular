@@ -18,7 +18,7 @@
       </div>
       <div class="form-group">
         <label>StartDate</label>
-        <input class="form-control" name="startDate" type="date" [(ngModel)]="department.startDate" #startDate="ngModel" />
+        <input class="form-control" name="startDate" type="date" [(ngModel)]="localStartDate" #startDate="ngModel" />
         <p *ngIf="startDate.errors?.required && form.submitted" class="text-danger">StartDate is required</p>
       </div>
       <div class="form-group">

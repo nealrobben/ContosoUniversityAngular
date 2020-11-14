@@ -24,7 +24,7 @@ export class DepartmentCreateComponent {
 
   save(form: NgForm) {
 
-    this.department.startDate = new Date(this.localStartDate)
+    this.department.startDate = new Date(this.localStartDate);
 
     if (form.valid) {
       this.client.create(this.department).subscribe(result => {

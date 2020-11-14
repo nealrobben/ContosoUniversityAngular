@@ -11,11 +11,14 @@ import { StudentsClient, CreateStudentCommand } from '../contosouniversityangula
 export class StudentCreateComponent {
 
   public student: CreateStudentCommand = new CreateStudentCommand();
+  public localEnrollmentDate = new Date();
 
   constructor(private client: StudentsClient, private router: Router) {
   }
 
   save(form: NgForm) {
+
+    this.student.enrollmentDate = new Date(this.localEnrollmentDate);
 
     if (form.valid) {
       this.client.create(this.student).subscribe(result => {

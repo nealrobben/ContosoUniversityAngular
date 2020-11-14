@@ -19,7 +19,7 @@ export class InstructorCreateComponent {
   save(form: NgForm) {
 
     //Set date because datepicker returns a string
-    this.instructor.hireDate = new Date(this.localHireDate)
+    this.instructor.hireDate = new Date(this.localHireDate);
 
     if (form.valid) {
       this.client.create(this.instructor).subscribe(result => {

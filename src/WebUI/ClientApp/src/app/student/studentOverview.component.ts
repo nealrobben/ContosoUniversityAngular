@@ -29,8 +29,9 @@ export class StudentOverviewComponent {
 
     var pageNumber = this.vm.pageNumber ?? 1;
     var searchString = this.vm.currentFilter ?? "";
+    var sortOrder = this.vm.currentSort ?? "";
 
-    this.client.getAll("", "", searchString, pageNumber).subscribe(result => {
+    this.client.getAll(sortOrder, "", searchString, pageNumber).subscribe(result => {
       this.vm = result;
     }, error => console.error(error));
   }
@@ -45,11 +46,34 @@ export class StudentOverviewComponent {
   }
 
   public sortByLastName() {
-	//TODO: implement
+    //TODO: implement
+
+    //Sort parameter values are:
+    //"" -> last name ascending
+    //name_desc
+    //Date
+    //date_desc
+
+    if (this.vm.currentSort == "" || this.vm.currentSort == null) {
+      this.vm.currentSort = "name_desc"
+    }
+    else {
+      this.vm.currentSort = ""
+    }
+
+    this.getStudents();
   }
 
   public sortByEnrollmentDate() {
 
+    if (this.vm.currentSort == "Date") {
+      this.vm.currentSort = "date_desc"
+    }
+    else {
+      this.vm.currentSort = "Date"
+    }
+
+    this.getStudents();
   }
 
   public previousPage() {

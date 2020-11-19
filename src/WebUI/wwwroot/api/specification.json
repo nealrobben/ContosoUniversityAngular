@@ -451,6 +451,39 @@
             }
           }
         }
+      },
+      "put": {
+        "tags": [
+          "Instructors"
+        ],
+        "operationId": "Instructors_Update",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateInstructorCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/Instructors/{id}": {
@@ -1593,6 +1626,33 @@
           "hireDate": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "UpdateInstructorCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "instructorID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "hireDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "officeLocation": {
+            "type": "string",
+            "nullable": true
           }
         }
       },

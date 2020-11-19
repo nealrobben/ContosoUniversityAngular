@@ -748,6 +748,7 @@ export class DepartmentsClient implements IDepartmentsClient {
 export interface IInstructorsClient {
     getAll(): Observable<InstructorsOverviewVM>;
     create(command: CreateInstructorCommand): Observable<void>;
+    update(command: UpdateInstructorCommand): Observable<void>;
     get(id: string | null): Observable<InstructorDetailsVM>;
     delete(id: string | null): Observable<void>;
     getLookup(): Observable<InstructorsLookupVM>;
@@ -844,6 +845,56 @@ export class InstructorsClient implements IInstructorsClient {
     }
 
     protected processCreate(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let resultdefault: any = null;
+            let resultDatadefault = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            resultdefault = ProblemDetails.fromJS(resultDatadefault);
+            return throwException("A server side error occurred.", status, _responseText, _headers, resultdefault);
+            }));
+        }
+    }
+
+    update(command: UpdateInstructorCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/Instructors";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -3022,6 +3073,58 @@ export interface ICreateInstructorCommand {
     firstName?: string | undefined;
     lastName?: string | undefined;
     hireDate?: Date;
+}
+
+export class UpdateInstructorCommand implements IUpdateInstructorCommand {
+    instructorID?: number | undefined;
+    lastName?: string | undefined;
+    firstName?: string | undefined;
+    hireDate?: Date;
+    officeLocation?: string | undefined;
+
+    constructor(data?: IUpdateInstructorCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.instructorID = _data["instructorID"];
+            this.lastName = _data["lastName"];
+            this.firstName = _data["firstName"];
+            this.hireDate = _data["hireDate"] ? new Date(_data["hireDate"].toString()) : <any>undefined;
+            this.officeLocation = _data["officeLocation"];
+        }
+    }
+
+    static fromJS(data: any): UpdateInstructorCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateInstructorCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["instructorID"] = this.instructorID;
+        data["lastName"] = this.lastName;
+        data["firstName"] = this.firstName;
+        data["hireDate"] = this.hireDate ? this.hireDate.toISOString() : <any>undefined;
+        data["officeLocation"] = this.officeLocation;
+        return data; 
+    }
+}
+
+export interface IUpdateInstructorCommand {
+    instructorID?: number | undefined;
+    lastName?: string | undefined;
+    firstName?: string | undefined;
+    hireDate?: Date;
+    officeLocation?: string | undefined;
 }
 
 export class StudentsOverviewVM implements IStudentsOverviewVM {

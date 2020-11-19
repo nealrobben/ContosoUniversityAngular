@@ -1,5 +1,6 @@
 ﻿using ContosoUniversityAngular.Application.Instructors.Commands.CreateInstructor;
 using ContosoUniversityAngular.Application.Instructors.Commands.DeleteInstructor;
+using ContosoUniversityAngular.Application.Instructors.Commands.UpdateInstructor;
 using ContosoUniversityAngular.Application.Instructors.Queries.GetInstructorDetails;
 using ContosoUniversityAngular.Application.Instructors.Queries.GetInstructorsLookup;
 using ContosoUniversityCQRS.Application.Instructors.Queries.GetInstructorsOverview;
@@ -51,6 +52,16 @@ namespace ContosoUniversityAngular.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
         public async Task<IActionResult> Create([FromBody] CreateInstructorCommand command)
+        {
+            await Mediator.Send(command);
+
+            return NoContent();
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Update([FromBody] UpdateInstructorCommand command)
         {
             await Mediator.Send(command);
 

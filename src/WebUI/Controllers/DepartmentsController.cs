@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using ContosoUniversityAngular.Application.Departments.Queries.GetDepartmentsLookup;
+using ContosoUniversityAngular.Application.Departments.Commands.UpdateDepartment;
 
 namespace ContosoUniversityAngular.WebUI.Controllers
 {
@@ -51,6 +52,16 @@ namespace ContosoUniversityAngular.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
         public async Task<IActionResult> Create([FromBody] CreateDepartmentCommand command)
+        {
+            await Mediator.Send(command);
+
+            return NoContent();
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Update([FromBody] UpdateDepartmentCommand command)
         {
             await Mediator.Send(command);
 

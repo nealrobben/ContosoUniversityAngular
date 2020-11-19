@@ -417,6 +417,7 @@ export class CoursesClient implements ICoursesClient {
 export interface IDepartmentsClient {
     getAll(): Observable<DepartmentsOverviewVM>;
     create(command: CreateDepartmentCommand): Observable<void>;
+    update(command: UpdateDepartmentCommand): Observable<void>;
     get(id: string | null): Observable<DepartmentDetailVM>;
     delete(id: string | null): Observable<void>;
     getLookup(): Observable<DepartmentsLookupVM>;
@@ -513,6 +514,56 @@ export class DepartmentsClient implements IDepartmentsClient {
     }
 
     protected processCreate(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let resultdefault: any = null;
+            let resultDatadefault = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            resultdefault = ProblemDetails.fromJS(resultDatadefault);
+            return throwException("A server side error occurred.", status, _responseText, _headers, resultdefault);
+            }));
+        }
+    }
+
+    update(command: UpdateDepartmentCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/Departments";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -2591,6 +2642,62 @@ export interface ICreateDepartmentCommand {
     budget?: number;
     startDate?: Date;
     instructorID?: number;
+}
+
+export class UpdateDepartmentCommand implements IUpdateDepartmentCommand {
+    departmentID?: number | undefined;
+    name?: string | undefined;
+    budget?: number;
+    startDate?: Date;
+    rowVersion?: string | undefined;
+    instructorID?: number | undefined;
+
+    constructor(data?: IUpdateDepartmentCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.departmentID = _data["departmentID"];
+            this.name = _data["name"];
+            this.budget = _data["budget"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.rowVersion = _data["rowVersion"];
+            this.instructorID = _data["instructorID"];
+        }
+    }
+
+    static fromJS(data: any): UpdateDepartmentCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateDepartmentCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["departmentID"] = this.departmentID;
+        data["name"] = this.name;
+        data["budget"] = this.budget;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["rowVersion"] = this.rowVersion;
+        data["instructorID"] = this.instructorID;
+        return data; 
+    }
+}
+
+export interface IUpdateDepartmentCommand {
+    departmentID?: number | undefined;
+    name?: string | undefined;
+    budget?: number;
+    startDate?: Date;
+    rowVersion?: string | undefined;
+    instructorID?: number | undefined;
 }
 
 export class InstructorsOverviewVM implements IInstructorsOverviewVM {

@@ -1079,6 +1079,7 @@ export class InstructorsClient implements IInstructorsClient {
 export interface IStudentsClient {
     getAll(sortOrder: string | null | undefined, currentFilter: string | null | undefined, searchString: string | null | undefined, pageNumber: number | null | undefined): Observable<StudentsOverviewVM>;
     create(command: CreateStudentCommand): Observable<void>;
+    update(command: UpdateStudentCommand): Observable<void>;
     get(id: string | null): Observable<StudentDetailsVM>;
     delete(id: string | null): Observable<void>;
     byCourse(id: string | null): Observable<StudentsForCourseVM>;
@@ -1183,6 +1184,56 @@ export class StudentsClient implements IStudentsClient {
     }
 
     protected processCreate(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let resultdefault: any = null;
+            let resultDatadefault = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            resultdefault = ProblemDetails.fromJS(resultDatadefault);
+            return throwException("A server side error occurred.", status, _responseText, _headers, resultdefault);
+            }));
+        }
+    }
+
+    update(command: UpdateStudentCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/Students";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -3482,6 +3533,54 @@ export class CreateStudentCommand implements ICreateStudentCommand {
 }
 
 export interface ICreateStudentCommand {
+    lastName?: string | undefined;
+    firstName?: string | undefined;
+    enrollmentDate?: Date;
+}
+
+export class UpdateStudentCommand implements IUpdateStudentCommand {
+    studentID?: number | undefined;
+    lastName?: string | undefined;
+    firstName?: string | undefined;
+    enrollmentDate?: Date;
+
+    constructor(data?: IUpdateStudentCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.studentID = _data["studentID"];
+            this.lastName = _data["lastName"];
+            this.firstName = _data["firstName"];
+            this.enrollmentDate = _data["enrollmentDate"] ? new Date(_data["enrollmentDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): UpdateStudentCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateStudentCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["studentID"] = this.studentID;
+        data["lastName"] = this.lastName;
+        data["firstName"] = this.firstName;
+        data["enrollmentDate"] = this.enrollmentDate ? this.enrollmentDate.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IUpdateStudentCommand {
+    studentID?: number | undefined;
     lastName?: string | undefined;
     firstName?: string | undefined;
     enrollmentDate?: Date;

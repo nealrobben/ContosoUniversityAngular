@@ -1450,6 +1450,16 @@
           "administratorName": {
             "type": "string",
             "nullable": true
+          },
+          "instructorID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "rowVersion": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
           }
         }
       },

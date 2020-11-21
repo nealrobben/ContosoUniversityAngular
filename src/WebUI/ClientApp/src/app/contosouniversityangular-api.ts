@@ -2568,6 +2568,8 @@ export class DepartmentDetailVM implements IDepartmentDetailVM {
     budget?: number;
     startDate?: Date;
     administratorName?: string | undefined;
+    instructorID?: number | undefined;
+    rowVersion?: string | undefined;
 
     constructor(data?: IDepartmentDetailVM) {
         if (data) {
@@ -2585,6 +2587,8 @@ export class DepartmentDetailVM implements IDepartmentDetailVM {
             this.budget = _data["budget"];
             this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
             this.administratorName = _data["administratorName"];
+            this.instructorID = _data["instructorID"];
+            this.rowVersion = _data["rowVersion"];
         }
     }
 
@@ -2602,6 +2606,8 @@ export class DepartmentDetailVM implements IDepartmentDetailVM {
         data["budget"] = this.budget;
         data["startDate"] = this.startDate ? formatDate(this.startDate) : <any>undefined;
         data["administratorName"] = this.administratorName;
+        data["instructorID"] = this.instructorID;
+        data["rowVersion"] = this.rowVersion;
         return data; 
     }
 }
@@ -2612,6 +2618,8 @@ export interface IDepartmentDetailVM {
     budget?: number;
     startDate?: Date;
     administratorName?: string | undefined;
+    instructorID?: number | undefined;
+    rowVersion?: string | undefined;
 }
 
 export class DepartmentsLookupVM implements IDepartmentsLookupVM {

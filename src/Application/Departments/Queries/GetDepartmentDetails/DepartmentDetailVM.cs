@@ -21,6 +21,10 @@ namespace ContosoUniversityAngular.Application.Departments.Queries.GetDepartment
 
         public string AdministratorName { get; set; }
 
+        public int? InstructorID { get; set; }
+
+        public byte[] RowVersion { get; set; }
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Department, DepartmentDetailVM>()

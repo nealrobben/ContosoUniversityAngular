@@ -1,35 +1,39 @@
 <h1>Edit</h1>
 
-<div>
-  <h4>Department</h4>
-  <hr />
-  <dl class="row">
-    <dt class="col-sm-2">
-      Name
-    </dt>
-    <dd class="col-sm-10">
-      Name-value
-    </dd>
-    <dt class="col-sm-2">
-      Budget
-    </dt>
-    <dd class="col-sm-10">
-      Budget-value
-    </dd>
-    <dt class="col-sm-2">
-      StartDate
-    </dt>
-    <dd class="col-sm-10">
-      StartDate-value
-    </dd>
-    <dt class="col-sm-2">
-      AdministratorName
-    </dt>
-    <dd class="col-sm-10">
-      AdministratorName-value
-    </dd>
-  </dl>
-</div>
-<div>
-  <a routerLink="/departments" routerLinkActive="active">Back to List</a>
+<h4>Department</h4>
+<hr />
+
+<div class="row">
+  <div class="col-md-4">
+    <form novalidate #form="ngForm" (ngSubmit)="save(form)">
+      <div class="form-group">
+        <label>Name</label>
+        <input class="form-control" name="name" required [(ngModel)]="vm.name" #name="ngModel" />
+        <p *ngIf="name.errors?.required && form.submitted" class="text-danger">Name is required</p>
+      </div>
+      <div class="form-group">
+        <label>Budget</label>
+        <input class="form-control" name="budget" type="number" required [(ngModel)]="vm.budget" #budget="ngModel" />
+        <p *ngIf="budget.errors?.required && form.submitted" class="text-danger">Budget is required</p>
+      </div>
+      <div class="form-group">
+        <label>StartDate</label>
+        <input class="form-control" name="startDate" type="date" [(ngModel)]="localStartDate" #startDate="ngModel" />
+        <p *ngIf="startDate.errors?.required && form.submitted" class="text-danger">StartDate is required</p>
+      </div>
+      <div class="form-group">
+        <label>Instructor</label>
+        <div>
+          <select name="instructorID" #instructor="ngModel" required [(ngModel)]="vm.instructorID">
+            <option *ngFor="let item of instructorsLookupVM.instructors" [ngValue]="item.id">{{item.fullName}}</option>
+          </select>
+          <p *ngIf="instructor.errors?.required && form.submitted" class="text-danger">Instructor is required</p>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary m-1">
+        Update
+      </button>
+    </form>
+    <a routerLink="/departments" routerLinkActive="active">Back to List</a>
+  </div>
 </div>

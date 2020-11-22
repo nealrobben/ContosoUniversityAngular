@@ -21,13 +21,22 @@ export class DepartmentEditComponent {
 
     client.get(departmentId).subscribe(result => {
       this.vm = result;
-      this.localStartDate = result.startDate.toISOString();
+      this.localStartDate = this.ConvertDateToString(result.startDate);
+      console.log(this.localStartDate);
+
     }, error => console.error(error));
 
     instructorsClient.getLookup().subscribe(result => {
       this.instructorsLookupVM = result;
       console.log(result.instructors.length);
     }, error => console.error(error));
+  }
+
+  ConvertDateToString(dateIn: Date): string {
+    var yyyy = dateIn.getFullYear();
+    var mm = dateIn.getMonth() + 1; // getMonth() is zero-based
+    var dd = dateIn.getDate();
+    return String(yyyy + "-" + mm + "-" + dd); // Leading zeros for mm and dd
   }
 
   save(form: NgForm) {

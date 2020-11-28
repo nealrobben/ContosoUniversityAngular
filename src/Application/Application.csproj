@@ -22,7 +22,6 @@
   <ItemGroup>
     <Folder Include="Common\Mappings\" />
     <Folder Include="CourseAssignment\" />
-    <Folder Include="System\" />
   </ItemGroup>
 
 </Project>

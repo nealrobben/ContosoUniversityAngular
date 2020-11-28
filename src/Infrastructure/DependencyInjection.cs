@@ -1,5 +1,4 @@
 ﻿using ContosoUniversityAngular.Application.Common.Interfaces;
-using ContosoUniversityAngular.Infrastructure.Files;
 using ContosoUniversityAngular.Infrastructure.Identity;
 using ContosoUniversityAngular.Infrastructure.Persistence;
 using ContosoUniversityAngular.Infrastructure.Services;
@@ -38,7 +37,6 @@ namespace ContosoUniversityAngular.Infrastructure
 
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IIdentityService, IdentityService>();
-            services.AddTransient<ICsvFileBuilder, CsvFileBuilder>();
 
             services.AddDbContext<SchoolContext>(options => 
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));

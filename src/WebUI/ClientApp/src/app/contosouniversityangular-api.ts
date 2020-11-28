@@ -2963,6 +2963,7 @@ export class InstructorDetailsVM implements IInstructorDetailsVM {
     lastName?: string | undefined;
     firstName?: string | undefined;
     hireDate?: Date;
+    officeLocation?: string | undefined;
 
     constructor(data?: IInstructorDetailsVM) {
         if (data) {
@@ -2979,6 +2980,7 @@ export class InstructorDetailsVM implements IInstructorDetailsVM {
             this.lastName = _data["lastName"];
             this.firstName = _data["firstName"];
             this.hireDate = _data["hireDate"] ? new Date(_data["hireDate"].toString()) : <any>undefined;
+            this.officeLocation = _data["officeLocation"];
         }
     }
 
@@ -2995,6 +2997,7 @@ export class InstructorDetailsVM implements IInstructorDetailsVM {
         data["lastName"] = this.lastName;
         data["firstName"] = this.firstName;
         data["hireDate"] = this.hireDate ? this.hireDate.toISOString() : <any>undefined;
+        data["officeLocation"] = this.officeLocation;
         return data; 
     }
 }
@@ -3004,6 +3007,7 @@ export interface IInstructorDetailsVM {
     lastName?: string | undefined;
     firstName?: string | undefined;
     hireDate?: Date;
+    officeLocation?: string | undefined;
 }
 
 export class InstructorsLookupVM implements IInstructorsLookupVM {

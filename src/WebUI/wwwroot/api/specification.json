@@ -1624,6 +1624,10 @@
           "hireDate": {
             "type": "string",
             "format": "date-time"
+          },
+          "officeLocation": {
+            "type": "string",
+            "nullable": true
           }
         }
       },

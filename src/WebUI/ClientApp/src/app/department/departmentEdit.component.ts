@@ -34,8 +34,8 @@ export class DepartmentEditComponent {
 
   ConvertDateToString(dateIn: Date): string {
     var yyyy = dateIn.getFullYear();
-    var mm = dateIn.getMonth() + 1; // getMonth() is zero-based
-    var dd = dateIn.getDate();
+    var mm = (dateIn.getMonth() + 1).toString().padStart(2, "0"); // getMonth() is zero-based
+    var dd = (dateIn.getDate()).toString().padStart(2, "0");
     return String(yyyy + "-" + mm + "-" + dd); // Leading zeros for mm and dd
   }
 

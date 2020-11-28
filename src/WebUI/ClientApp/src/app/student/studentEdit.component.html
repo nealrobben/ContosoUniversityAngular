@@ -1,3 +1,30 @@
-Placeholder for student edit
+<h1>Edit</h1>
 
-<a routerLink="/students" routerLinkActive="active">Back to List</a>
+<h4>Student</h4>
+<hr />
+
+<div class="row">
+  <div class="col-md-4">
+    <form novalidate #form="ngForm" (ngSubmit)="save(form)">
+      <div class="form-group">
+        <label>FirstName</label>
+        <input class="form-control" name="firstName" required [(ngModel)]="vm.firstName" #firstName="ngModel" />
+        <p *ngIf="firstName.errors?.required && form.submitted" class="text-danger">FirstName is required</p>
+      </div>
+      <div class="form-group">
+        <label>LastName</label>
+        <input class="form-control" name="lastName" required [(ngModel)]="vm.lastName" #lastName="ngModel" />
+        <p *ngIf="lastName.errors?.required && form.submitted" class="text-danger">LastName is required</p>
+      </div>
+      <div class="form-group">
+        <label>EnrollmentDate</label>
+        <input class="form-control" name="enrollmentDate" type="date" [(ngModel)]="localEnrollmentDate" #enrollmentDate="ngModel" />
+        <p *ngIf="enrollmentDate.errors?.required && form.submitted" class="text-danger">EnrollmentDate is required</p>
+      </div>
+      <button type="submit" class="btn btn-primary m-1">
+        Update
+      </button>
+    </form>
+    <a routerLink="/students" routerLinkActive="active">Back to List</a>
+  </div>
+</div>
